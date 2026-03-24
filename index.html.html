@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html class="light" lang="es" style="scroll-behavior: smooth;">
+<head>
+    <meta name="referrer" content="no-referrer">
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>RC Camis | Tienda Oficial de Camisetas de Fútbol</title>
+	
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: { primary: "#e11d48", "primary-dark": "#be123c", "background-light": "#f8fafc", "background-dark": "#0f172a" },
+                    fontFamily: { display: ["Inter", "sans-serif"] },
+                },
+            },
+        };
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .option-btn { border: 1px solid #e2e8f0; transition: all 0.2s; }
+        .option-btn:hover { border-color: #94a3b8; }
+        .option-btn.active { border-color: #e11d48; background-color: #fff1f2; color: #e11d48; font-weight: 700; ring: 1px solid #e11d48; }
+        .dark .option-btn { border-color: #334155; }
+        .dark .option-btn.active { background-color: #e11d48; color: white; border-color: #e11d48; }
+        .fade-in { animation: fadeIn 0.4s ease-in-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        /* Animación Toasts */
+        .toast-slide-up { animation: toastSlide 0.3s ease-out forwards; }
+        @keyframes toastSlide { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .group:hover .group-hover\:block { display: block; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 transition-colors duration-200 flex flex-col min-h-screen">
+
+<script>
+    // 🔴 PON AQUÍ TU USUARIO DE INSTAGRAM (Sin el @)
+    const USUARIO_INSTAGRAM = "rccamis"; 
+</script>
+
+<header class="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 h-16 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+        <div class="flex items-center justify-between h-full">
+            
+            <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="showHome()">
+                <img src="logo-Photoroom.png" alt="RC Camis Logo" class="h-10 md:h-12 w-auto object-contain hover:scale-105 transition-transform duration-300">
+                <span class="ml-3 text-xl font-extrabold tracking-tight uppercase hidden sm:block">RC <span class="text-primary">Camis</span></span>
+            </div>
+
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="#" onclick="showHome()" class="font-semibold text-slate-600 hover:text-primary dark:text-slate-300 dark:hover:text-primary transition-colors">Inicio</a>
+                
+                <div class="relative group">
+                    <button onclick="showCatalog('laliga')" class="font-semibold text-slate-600 hover:text-primary dark:text-slate-300 dark:hover:text-primary transition-colors flex items-center gap-1 pb-4 pt-4">
+                        Catálogo <span class="material-icons text-sm">expand_more</span>
+                    </button>
+                    <div class="absolute left-0 top-full mt-0 w-48 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl hidden group-hover:block overflow-hidden z-50">
+                        <a href="#" onclick="showCatalog('laliga')" class="block px-4 py-3 text-sm hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-700">🇪🇸 LaLiga</a>
+                        <a href="#" onclick="showCatalog('premier')" class="block px-4 py-3 text-sm hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-700">🇬🇧 Premier League</a>
+                        <a href="#" onclick="showCatalog('retro')" class="block px-4 py-3 text-sm hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-700 font-bold text-primary">🕰️ Joyas Retro</a>
+                        <a href="#" onclick="showCatalog('national_teams')" class="block px-4 py-3 text-sm hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-700">🌍 Selecciones</a>
+                        <a href="#" onclick="showCatalog('long_sleeve')" class="block px-4 py-3 text-sm hover:bg-slate-50 dark:hover:bg-slate-700">🧥 Manga Larga</a>
+                    </div>
+                </div>
+
+                <button onclick="toggleSizeGuide()" class="font-semibold text-slate-600 hover:text-primary dark:text-slate-300 dark:hover:text-primary flex items-center gap-1 transition-colors">
+                    <span class="material-icons text-sm">straighten</span> Guía de Tallas
+                </button>
+            </nav>
+
+            <div class="flex items-center space-x-2">
+                <button class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" onclick="document.documentElement.classList.toggle('dark')">
+                    <span class="material-icons text-slate-600 dark:text-slate-300">dark_mode</span>
+                </button>
+                <button onclick="toggleCart()" class="relative p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                    <span class="material-icons text-slate-600 dark:text-slate-300">shopping_cart</span>
+                    <span id="cart-badge" class="absolute top-0 right-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white bg-primary rounded-full hidden">0</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div id="home-view" class="flex-1 flex flex-col fade-in">
+    <section class="relative bg-slate-900 overflow-hidden min-h-[500px] flex items-center">
+        <div class="absolute inset-0">
+            <img src="https://jdesblog.s3.eu-west-1.amazonaws.com/wp-content/uploads/2025/06/WC26_Product_Shoot_16x9_HighRes_Hero-scaled.jpg" class="w-full h-full object-cover opacity-30">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"></div>
+        </div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center md:text-left flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 py-20">
+                <span class="inline-block py-1 px-3 rounded-full bg-primary/20 text-primary font-bold text-xs uppercase tracking-wider mb-4 border border-primary/30 backdrop-blur-sm">Nueva Temporada</span>
+                <h1 class="text-4xl md:text-6xl font-black text-white leading-tight mb-6">
+                    VISTE TU PASIÓN.<br> <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-pink-500">HAZ HISTORIA.</span>
+                </h1>
+                <p class="text-lg text-slate-300 mb-8 max-w-xl mx-auto md:mx-0">
+                    Las mejores camisetas de fútbol con calidad premium. Versión aficionado, jugador y clásicos retro. Elige tu equipo y domina el campo.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                    <button onclick="showCatalog('laliga')" class="px-8 py-4 bg-primary hover:bg-primary-dark text-white font-bold rounded-full transition-transform hover:scale-105 shadow-lg shadow-primary/30 flex items-center justify-center gap-2">
+                        Explorar Tienda <span class="material-icons text-sm">arrow_forward</span>
+                    </button>
+                    <button onclick="showCatalog('retro')" class="px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-bold rounded-full transition-colors backdrop-blur-md border border-white/10">
+                        Ver Colección Retro
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="border-b border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 py-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="flex items-center justify-center text-center md:text-left md:justify-start gap-4">
+                    <div class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
+                        <span class="material-icons">local_shipping</span>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 dark:text-white">Envíos Seguros</h4>
+                        <p class="text-sm text-slate-500">A todo el mundo con tracking.</p>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center text-center md:text-left md:justify-start gap-4">
+                    <div class="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 dark:text-green-400">
+                        <span class="material-icons">verified</span>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 dark:text-white">Calidad Premium</h4>
+                        <p class="text-sm text-slate-500">Materiales y acabados top.</p>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center text-center md:text-left md:justify-start gap-4">
+                    <div class="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 dark:text-purple-400">
+                        <span class="material-icons">support_agent</span>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 dark:text-white">Atención 24/7</h4>
+                        <p class="text-sm text-slate-500">Soporte directo por Instagram.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div class="flex justify-between items-end mb-8">
+            <div>
+                <h2 class="text-3xl font-black text-slate-900 dark:text-white">Categorías Top</h2>
+                <p class="text-slate-500 mt-2">Encuentra exactamente lo que buscas.</p>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div onclick="showCatalog('retro')" class="group relative h-64 rounded-2xl overflow-hidden cursor-pointer shadow-md">
+                <img src="https://assets.realmadrid.com/is/image/realmadrid/1330191683918?$Mobile$&fit=wrap" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                <div class="absolute bottom-6 left-6">
+                    <h3 class="text-2xl font-black text-white">Leyendas Retro</h3>
+                    <p class="text-slate-300 text-sm mt-1">Camisetas que hicieron historia</p>
+                </div>
+            </div>
+            <div onclick="showCatalog('national_teams')" class="group relative h-64 rounded-2xl overflow-hidden cursor-pointer shadow-md">
+                <img src="https://i8.amplience.net/i/jpl/e03485645-33-wc26-home-feds-germany-ig-portrait-shots-feed-1080x1350px-nov25-v12-78467f4312af684dc82eff27055be023" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                <div class="absolute bottom-6 left-6">
+                    <h3 class="text-2xl font-black text-white">Selecciones</h3>
+                    <p class="text-slate-300 text-sm mt-1">Defiende a tu país</p>
+                </div>
+            </div>
+            <div onclick="showCatalog('premier')" class="group relative h-64 rounded-2xl overflow-hidden cursor-pointer shadow-md">
+                <img src="https://images.unsplash.com/photo-1614632537190-23e4146777db?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                <div class="absolute bottom-6 left-6">
+                    <h3 class="text-2xl font-black text-white">Todas las ligas</h3>
+                    <p class="text-slate-300 text-sm mt-1">Las camisetas de los mejores clubes del mundo</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="mystery-box" class="py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div class="relative rounded-3xl overflow-hidden bg-slate-900 border border-purple-500/30 shadow-2xl shadow-purple-900/20">
+            <div class="absolute top-0 right-0 -mr-20 -mt-20 w-72 h-72 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
+            <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-72 h-72 bg-pink-600 rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
+            
+            <div class="relative z-10 p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
+                <div class="text-center md:text-left md:w-2/3">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 text-xs font-bold uppercase tracking-widest mb-4 border border-purple-500/30">
+                        <span class="material-icons text-sm">card_giftcard</span> Edición Limitada
+                    </div>
+                    <h2 class="text-3xl md:text-5xl font-black text-white mb-4">MYSTERY BOX 📦</h2>
+                    <p class="text-purple-100/80 text-lg mb-6 max-w-xl">
+                        ¿No sabes qué elegir? Déjalo en nuestras manos. Recibe una camiseta de fútbol aleatoria (retro, actual o especial) de tu talla. <strong>¡Emoción garantizada!</strong>
+                    </p>
+                    <div class="flex items-center gap-4 justify-center md:justify-start">
+                        <div class="text-4xl font-black text-white">25€</div>
+                        <button onclick="comprarMysteryBox()" class="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold rounded-xl transition-all shadow-lg flex items-center gap-2">
+                            ¡Quiero mi sorpresa! <span class="material-icons text-sm">auto_awesome</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="md:w-1/3 flex justify-center">
+                    <div class="text-[120px] filter drop-shadow-2xl transform rotate-12 hover:rotate-0 transition-transform duration-500">
+                        🎁
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div id="catalog-view" class="hidden flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full fade-in">
+    <nav class="mb-6 sticky top-16 z-40 bg-background-light/95 dark:bg-background-dark/95 py-2 border-b border-slate-200/50 dark:border-slate-800/50">
+        <div class="flex items-center space-x-2 overflow-x-auto hide-scrollbar pb-2" id="category-menu">
+            </div>
+    </nav>
+
+    <div class="flex flex-col md:flex-row gap-4 mb-6">
+        <div class="flex-1 bg-white dark:bg-slate-800 p-2 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center shadow-sm">
+            <span class="material-icons text-slate-400 ml-2">search</span>
+            <input id="search-input" type="text" placeholder="Buscar camiseta (Ej: Athletic, Messi)..." class="w-full bg-transparent border-none py-2 px-3 focus:ring-0 text-sm outline-none">
+        </div>
+        <div class="w-full md:w-64">
+            <select id="sort-select" onchange="applySort()" class="w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-xl text-sm p-3 focus:ring-primary shadow-sm outline-none">
+                <option value="default">Orden por defecto</option>
+                <option value="price_asc">Precio: Menor a Mayor</option>
+                <option value="price_desc">Precio: Mayor a Menor</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="flex items-center justify-between mb-6">
+        <h2 id="section-title" class="text-2xl font-bold flex items-center">Explorar Catálogo</h2>
+        <span id="product-count" class="text-xs text-slate-500 font-mono bg-slate-200 dark:bg-slate-800 px-2 py-1 rounded">0</span>
+    </div>
+
+    <div id="loader-initial" class="hidden col-span-full text-center py-20">
+        <span class="material-icons animate-spin text-5xl text-primary">refresh</span>
+        <p class="text-slate-500 mt-4">Sincronizando catálogo...</p>
+    </div>
+
+    <div id="products-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+        </div>
+    
+    <div id="btn-container" class="col-span-full text-center mt-10 hidden">
+        <button id="btn-cargar-mas" onclick="cargarMasProductos()" class="px-8 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-full font-bold shadow-sm hover:shadow-md transition-all">
+            Ver más camisetas ⬇️
+        </button>
+    </div>
+</div>
+
+<div id="product-detail-view" class="hidden flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full fade-in pb-20">
+    <button onclick="showCatalog(currentCollectionID)" class="mb-4 text-sm text-slate-500 hover:text-primary flex items-center gap-1 font-medium">
+        <span class="material-icons text-sm">arrow_back</span> Volver al catálogo
+    </button>
+
+    <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl overflow-hidden border border-slate-100 dark:border-slate-700">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-0">
+            <div class="lg:col-span-7 bg-slate-50 dark:bg-slate-900 p-4">
+                <div class="aspect-[4/4] w-full rounded-2xl overflow-hidden relative bg-white dark:bg-slate-800 flex items-center justify-center shadow-inner">
+                    <img id="detail-image" src="" class="max-h-full w-full object-contain hover:scale-105 transition-transform duration-500">
+                </div>
+            </div>
+
+            <div class="lg:col-span-5 p-6 lg:p-10 flex flex-col h-full bg-white dark:bg-slate-800">
+                <h1 id="detail-title" class="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white mb-2 leading-tight">Nombre Camiseta</h1>
+                
+                <div class="flex items-end space-x-3 mb-6 border-b border-slate-100 dark:border-slate-700 pb-4">
+                    <div class="text-4xl font-black text-primary" id="detail-price">0€</div>
+                    <div class="text-lg text-slate-400 line-through mb-1" id="detail-old-price">0€</div> </div>
+
+                <div class="flex-1 overflow-y-auto pr-2 space-y-6">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-bold text-sm text-slate-700 dark:text-slate-200">Talla</span>
+                            <button onclick="toggleSizeGuide()" class="text-xs text-primary font-bold hover:underline flex items-center">
+                                <span class="material-icons text-xs mr-1">straighten</span> Guía de tallas
+                            </button>
+                        </div>
+                        <div class="grid grid-cols-5 gap-2">
+                            <button class="option-btn size-btn rounded-md py-2 text-sm font-medium" onclick="selectOption('size', 'S', 0, this)">S</button>
+                            <button class="option-btn size-btn rounded-md py-2 text-sm font-medium" onclick="selectOption('size', 'M', 0, this)">M</button>
+                            <button class="option-btn size-btn rounded-md py-2 text-sm font-medium" onclick="selectOption('size', 'L', 0, this)">L</button>
+                            <button class="option-btn size-btn rounded-md py-2 text-sm font-medium" onclick="selectOption('size', 'XL', 0, this)">XL</button>
+                            <button class="option-btn size-btn rounded-md py-2 text-sm font-medium" onclick="selectOption('size', '2XL', 0, this)">2XL</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <span class="font-bold text-sm text-slate-700 dark:text-slate-200 block mb-2">Manga</span>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button class="option-btn manga-btn active rounded-lg py-3 text-sm flex items-center justify-center gap-2" onclick="selectOption('manga', 'Corta', 0, this)">
+                                <span class="material-icons text-sm">content_cut</span> Corta
+                            </button>
+                            <button class="option-btn manga-btn rounded-lg py-3 text-sm flex items-center justify-center gap-2" onclick="selectOption('manga', 'Larga', 3, this)">
+                                <span class="material-icons text-sm">code</span> Larga (+3€)
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <span class="font-bold text-sm text-slate-700 dark:text-slate-200 block mb-2">Versión</span>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button class="option-btn version-btn active rounded-lg py-3 text-sm flex flex-col items-center justify-center" onclick="selectOption('version', 'Aficionado', 0, this)">
+                                <span class="font-bold">Aficionado</span>
+                                <span class="text-[10px] opacity-70">Estándar</span>
+                            </button>
+                            <button class="option-btn version-btn rounded-lg py-3 text-sm flex flex-col items-center justify-center" onclick="selectOption('version', 'Jugador', 3, this)">
+                                <span class="font-bold">Jugador (+3€)</span>
+                                <span class="text-[10px] opacity-70">Ajustada / Premium</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <span class="font-bold text-sm text-slate-700 dark:text-slate-200 block mb-2">Parche (Opcional)</span>
+                        <select id="patch-select" class="w-full bg-slate-50 dark:bg-slate-700 border-slate-200 dark:border-slate-600 rounded-lg text-sm p-3 focus:ring-primary outline-none">
+                            <option value="Ninguno">Sin Parche</option>
+                            <option value="Champions League">Champions League (+2€)</option>
+                            <option value="Liga Nacional">Liga Nacional (+2€)</option>
+                            <option value="Especiales">Copa / Especial (+2€)</option>
+                        </select>
+                    </div>
+
+                    <div class="bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-dashed border-slate-300 dark:border-slate-600">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="font-bold text-sm flex items-center"><span class="material-icons text-primary text-sm mr-2">edit</span> Personalizar (+3€)</span>
+                            <span class="text-xs bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded text-slate-500">Opcional</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-3">
+                            <div class="col-span-2">
+                                <input type="text" id="custom-name" placeholder="Nombre (Ej: WILLIAMS)" class="w-full text-sm rounded-md border-slate-200 dark:border-slate-600 dark:bg-slate-800 uppercase focus:ring-primary outline-none">
+                            </div>
+                            <div>
+                                <input type="number" id="custom-number" placeholder="Nº (9)" class="w-full text-sm rounded-md border-slate-200 dark:border-slate-600 dark:bg-slate-800 focus:ring-primary outline-none">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="error-msg" class="hidden text-red-500 text-xs font-bold mt-4 animate-bounce bg-red-100 dark:bg-red-900/20 p-2 rounded text-center">
+                    ⚠️ Por favor, selecciona una talla primero.
+                </div>
+
+                <div class="mt-6 space-y-3 pt-4 border-t border-slate-100 dark:border-slate-700">
+                    <button onclick="addToCartCurrentProduct()" class="w-full bg-slate-900 dark:bg-white dark:text-slate-900 text-white font-bold py-4 rounded-xl hover:opacity-90 transition-all flex items-center justify-center shadow-lg">
+                        <span class="material-icons mr-2">shopping_bag</span> Añadir al Carrito
+                    </button>
+                    <button onclick="comprarDirectoInstagram()" class="w-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 text-white font-bold py-4 rounded-xl hover:opacity-90 transition-all flex items-center justify-center shadow-lg">
+                        <span class="material-icons mr-2">camera_alt</span> Comprar por Instagram
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="size-guide-modal" class="fixed inset-0 z-[70] hidden flex items-center justify-center">
+    <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="toggleSizeGuide()"></div>
+    <div class="relative bg-white dark:bg-slate-900 rounded-2xl shadow-2xl max-w-lg w-full m-4 overflow-hidden border border-slate-200 dark:border-slate-700 fade-in">
+        <div class="flex justify-between items-center p-4 border-b border-slate-100 dark:border-slate-800">
+            <h3 class="font-bold text-lg">Guía de Tallas</h3>
+            <button onclick="toggleSizeGuide()" class="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"><span class="material-icons">close</span></button>
+        </div>
+        <div class="p-4 bg-slate-100 dark:bg-slate-800 flex justify-center overflow-auto max-h-[60vh]">
+            <img src="tallas.png" alt="Guía de Tallas" class="max-w-full h-auto rounded shadow-sm">
+        </div>
+        <div class="p-4 text-xs text-slate-500 text-center border-t border-slate-100 dark:border-slate-800">
+            <strong>Consejo:</strong> Si eliges la versión <em>Jugador</em>, recomendamos pedir una talla superior a la habitual, ya que tienen un corte más entallado.
+        </div>
+    </div>
+</div>
+
+<div id="cart-modal" class="fixed inset-0 z-[60] hidden">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onclick="toggleCart()"></div>
+    <div class="absolute right-0 top-0 h-full w-full max-w-md bg-white dark:bg-slate-900 shadow-2xl p-6 flex flex-col transition-transform transform translate-x-full duration-300" id="cart-panel">
+        <div class="flex justify-between items-center mb-6 border-b border-slate-100 dark:border-slate-700 pb-4">
+            <h2 class="text-xl font-bold flex items-center"><span class="material-icons mr-2 text-primary">shopping_cart</span> Tu Pedido</h2>
+            <button onclick="toggleCart()" class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full"><span class="material-icons">close</span></button>
+        </div>
+        <div id="cart-items" class="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar"></div>
+        <div class="border-t border-slate-100 dark:border-slate-700 pt-6 mt-4">
+            <div class="flex justify-between font-bold text-xl mb-4 text-slate-900 dark:text-white"><span>Total:</span> <span><span id="cart-total">0</span>€</span></div>
+            <button onclick="enviarPedidoInstagram()" class="w-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 text-white font-bold py-4 rounded-xl shadow-lg flex justify-center items-center gap-2 hover:opacity-90 transition-opacity">
+                <span class="material-icons">content_copy</span> Confirmar pedido en Instagram
+            </button>
+            <p class="text-[11px] text-center text-slate-400 mt-3 px-2">Copiaremos tu pedido y te llevaremos a Instagram. Solo tienes que darle a <strong>Pegar</strong> en nuestro chat.</p>
+        </div>
+    </div>
+</div>
+
+<div id="toast-container" class="fixed bottom-24 right-4 z-[100] flex flex-col gap-2 pointer-events-none"></div>
+
+<a href="https://instagram.com/rccamis" id="ig-float" target="_blank" class="fixed bottom-6 right-6 bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white p-4 rounded-full shadow-2xl hover:scale-110 transition-transform z-50 flex items-center justify-center">
+    <span class="material-icons">camera_alt</span>
+</a>
+
+<footer id="contacto" class="bg-slate-900 text-white pt-16 pb-8 border-t border-slate-800 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row justify-between items-center md:items-start gap-8">
+            <div class="text-center md:text-left">
+                <div class="flex justify-center md:justify-start">
+                    <img src="logo-Photoroom.png" alt="RC Camis Logo" class="h-16 w-auto mb-4 object-contain">
+                </div>
+                <p class="text-slate-400 text-sm max-w-sm">Tu tienda de confianza. Calidad premium, atención personalizada y pasión por el fútbol.</p>
+            </div>
+            <div class="text-center md:text-right">
+                <h4 class="font-bold text-lg mb-4">Síguenos</h4>
+                <a href="https://instagram.com/rccamis" target="_blank" class="inline-flex w-12 h-12 rounded-full bg-slate-800 items-center justify-center hover:bg-gradient-to-tr hover:from-[#f09433] hover:to-[#bc1888] transition-all text-white shadow-lg"><span class="material-icons">camera_alt</span></a>
+            </div>
+        </div>
+        <div class="border-t border-slate-800 pt-8 mt-12 text-center text-xs text-slate-500">
+            <p>&copy; 2026 RC Camis. Todos los derechos reservados.</p>
+        </div>
+    </div>
+</footer>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, getDocs, limit, query } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDCxD-IVLjXcQT1LzfLVqy7nPpTZvwEqNnw",
+        authDomain: "rccamis-store.firebaseapp.com",
+        projectId: "rccamis-store",
+        storageBucket: "rccamis-store.appspot.com",
+        messagingSenderId: "1036696205279",
+        appId: "1:1036696205279:web:4bf61aa2503a41a6c5366a"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // --- ESTADO GLOBAL ---
+    let allProducts = []; 
+    let currentLimitCount = 20; 
+    let currentCollectionID = 'laliga';
+    let currentProduct = null;
+    let currentSelection = { size: null, manga: 'Corta', mangaPrice: 0, version: 'Aficionado', versionPrice: 0, basePrice: 0, patchPrice: 0 };
+
+    const categories = [
+        { id: 'laliga', label: '🇪🇸 LALIGA' },
+        { id: 'premier', label: '🇬🇧 PREMIER' },
+        { id: 'retro', label: '🕰️ RETRO' },
+        { id: 'national_teams', label: '🌍 SELECCIONES' },
+        { id: 'seriea', label: '🇮🇹 SERIE A' },
+        { id: 'bundesliga', label: '🇩🇪 BUNDESLIGA' },
+        { id: 'ligue1', label: '🇫🇷 LIGUE 1' },
+        { id: 'brasileiro', label: '🇧🇷 BRASIL' },
+        { id: 'argentina', label: '🇦🇷 ARGENTINA' },
+        { id: 'mls', label: '🇺🇸 MLS' },
+        { id: 'ligamx', label: '🇲🇽 MÉXICO' },
+        { id: 'long_sleeve', label: '🧥 M. LARGA' }
+    ];
+
+    // --- FUNCIONES UI GLOBALES ---
+    window.showToast = function(message, isError = false) {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `px-4 py-3 rounded-lg shadow-xl text-sm font-bold text-white flex items-center gap-2 toast-slide-up ${isError ? 'bg-red-500' : 'bg-slate-800 dark:bg-slate-700 border border-slate-600'}`;
+        toast.innerHTML = `<span class="material-icons text-sm">${isError ? 'error' : 'check_circle'}</span> ${message}`;
+        container.appendChild(toast);
+        setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.3s'; setTimeout(() => toast.remove(), 300); }, 3000);
+    }
+
+    window.toggleSizeGuide = function() { document.getElementById('size-guide-modal').classList.toggle('hidden'); }
+
+    window.showHome = function() {
+        document.getElementById('home-view').classList.remove('hidden');
+        document.getElementById('catalog-view').classList.add('hidden');
+        document.getElementById('product-detail-view').classList.add('hidden');
+        window.scrollTo(0,0);
+    }
+
+    window.showCatalog = async function(collectionId) {
+        document.getElementById('home-view').classList.add('hidden');
+        document.getElementById('product-detail-view').classList.add('hidden');
+        document.getElementById('catalog-view').classList.remove('hidden');
+        
+        if (currentCollectionID !== collectionId || allProducts.length === 0) {
+            currentCollectionID = collectionId;
+            document.getElementById('sort-select').value = 'default';
+            document.getElementById('search-input').value = '';
+            await loadCollectionWithCache(collectionId);
+        } else {
+            renderNav(); 
+        }
+        window.scrollTo(0,0);
+    }
+
+    // --- 🔴 MOTOR DE CACHÉ + FIREBASE ---
+    window.loadCollectionWithCache = async function(collectionId) {
+        const grid = document.getElementById('products-grid');
+        const loader = document.getElementById('loader-initial');
+        const btnContainer = document.getElementById('btn-container');
+        
+        grid.innerHTML = '';
+        btnContainer.classList.add('hidden');
+        loader.classList.remove('hidden');
+        currentLimitCount = 20; 
+
+        renderNav();
+
+        const cacheKey = 'rc_cache_' + collectionId;
+        const timeKey = 'rc_time_' + collectionId;
+        const cachedData = localStorage.getItem(cacheKey);
+        const cacheTime = localStorage.getItem(timeKey);
+        const now = Date.now();
+        const horasValidez = 24 * 60 * 60 * 1000; 
+
+        if (cachedData && cacheTime && (now - cacheTime < horasValidez)) {
+            allProducts = JSON.parse(cachedData);
+            aplicarOrdenYRenderizar();
+        } else {
+            try {
+                const q = query(collection(db, collectionId), limit(1000));
+                const snap = await getDocs(q);
+                
+                allProducts = [];
+                snap.forEach(doc => {
+                    const data = doc.data();
+                    const price = parseFloat(data.price) || 20;
+                    const oldPrice = Math.floor(price * 1.35); 
+                    allProducts.push({ ...data, id: doc.id, price: price, oldPrice: oldPrice });
+                });
+
+                localStorage.setItem(cacheKey, JSON.stringify(allProducts));
+                localStorage.setItem(timeKey, now.toString());
+
+                aplicarOrdenYRenderizar();
+            } catch (e) {
+                console.error(e);
+                showToast("Error conectando con la base de datos.", true);
+                loader.classList.add('hidden');
+            }
+        }
+    }
+
+    window.aplicarOrdenYRenderizar = function() {
+        const sortValue = document.getElementById('sort-select').value;
+        if (sortValue === 'price_asc') allProducts.sort((a, b) => a.price - b.price);
+        else if (sortValue === 'price_desc') allProducts.sort((a, b) => b.price - a.price);
+        else allProducts.sort((a, b) => 0.5 - Math.random()); 
+
+        document.getElementById('loader-initial').classList.add('hidden');
+        renderizarVistaActual();
+    }
+
+    window.renderizarVistaActual = function() {
+        const productosAVisualizar = allProducts.slice(0, currentLimitCount);
+        renderGrid(productosAVisualizar);
+
+        const btnContainer = document.getElementById('btn-container');
+        if (currentLimitCount >= allProducts.length) btnContainer.classList.add('hidden');
+        else btnContainer.classList.remove('hidden');
+    }
+
+    window.cargarMasProductos = function() {
+        currentLimitCount += 20;
+        renderizarVistaActual();
+    }
+
+    document.getElementById('search-input').addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase().trim();
+        const btnContainer = document.getElementById('btn-container');
+        
+        if(term === "") {
+            renderizarVistaActual();
+        } else {
+            const filtrados = allProducts.filter(p => 
+                p.name.toLowerCase().includes(term) || (p.team && p.team.toLowerCase().includes(term))
+            );
+            renderGrid(filtrados);
+            btnContainer.classList.add('hidden'); 
+        }
+    });
+
+    window.applySort = function() {
+        currentLimitCount = 20;
+        aplicarOrdenYRenderizar();
+    }
+
+    function renderNav() {
+        const menu = document.getElementById('category-menu');
+        menu.innerHTML = '';
+        categories.forEach(cat => {
+            const btn = document.createElement('button');
+            const isActive = currentCollectionID === cat.id;
+            btn.className = `whitespace-nowrap px-4 py-2 rounded-full text-xs font-bold transition-all border mr-2 ${isActive ? 'bg-slate-900 text-white border-slate-900 shadow-md dark:bg-white dark:text-slate-900' : 'bg-white border-slate-200 text-slate-600 hover:border-slate-400 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400'}`;
+            btn.innerText = cat.label;
+            btn.onclick = () => showCatalog(cat.id);
+            menu.appendChild(btn);
+        });
+        document.getElementById('section-title').innerHTML = categories.find(c => c.id === currentCollectionID)?.label || "Catálogo";
+        document.getElementById('product-count').innerText = allProducts.length;
+    }
+
+    function renderGrid(productsList) {
+        const grid = document.getElementById('products-grid');
+        grid.innerHTML = '';
+
+        if(productsList.length === 0) {
+            grid.innerHTML = '<div class="col-span-full text-center text-slate-400 py-10"><span class="material-icons text-5xl mb-2 opacity-50">search_off</span><p>No se encontró ninguna camiseta.</p></div>';
+            return;
+        }
+
+        productsList.forEach(p => {
+            const imgSrc = p.image || 'https://via.placeholder.com/300x400';
+            const card = document.createElement('div');
+            card.className = "group cursor-pointer bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all border border-slate-100 dark:border-slate-700 fade-in";
+            card.onclick = () => openProduct(p.id);
+            card.innerHTML = `
+                <div class="relative aspect-[3/4] bg-slate-100 overflow-hidden">
+                    <img src="${imgSrc}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute bottom-2 right-2 bg-white/95 dark:bg-slate-900/95 text-slate-900 dark:text-white text-xs font-bold px-2 py-1 rounded shadow-md border border-slate-200 dark:border-slate-700">
+                        <span class="text-[10px] text-slate-400 line-through mr-1">${p.oldPrice}€</span><span class="text-primary">${p.price}€</span>
+                    </div>
+                </div>
+                <div class="p-3">
+                    <h3 class="font-bold text-slate-900 dark:text-white text-sm leading-tight h-10 line-clamp-2">${p.name}</h3>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    // --- DETALLE DEL PRODUCTO ---
+    window.openProduct = function(productId) {
+        currentProduct = allProducts.find(p => p.id === productId);
+        if(!currentProduct) return;
+
+        currentSelection = { size: null, manga: 'Corta', mangaPrice: 0, version: 'Aficionado', versionPrice: 0, basePrice: currentProduct.price, patchPrice: 0 };
+        
+        document.getElementById('custom-name').value = "";
+        document.getElementById('custom-number').value = "";
+        document.getElementById('patch-select').value = "Ninguno";
+        document.getElementById('error-msg').classList.add('hidden');
+        document.querySelectorAll('.size-btn, .manga-btn, .version-btn').forEach(b => b.classList.remove('active'));
+        
+        document.querySelectorAll('.manga-btn')[0].classList.add('active');
+        document.querySelectorAll('.version-btn')[0].classList.add('active');
+
+        document.getElementById('detail-image').src = currentProduct.image;
+        document.getElementById('detail-title').innerText = currentProduct.name;
+        document.getElementById('detail-old-price').innerText = currentProduct.oldPrice + "€";
+
+        updatePriceDisplay();
+
+        document.getElementById('catalog-view').classList.add('hidden');
+        document.getElementById('product-detail-view').classList.remove('hidden');
+        window.scrollTo(0,0);
+    }
+
+    window.selectOption = function(type, value, price, btn) {
+        if(type === 'size') {
+            currentSelection.size = value;
+            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('error-msg').classList.add('hidden');
+        } else if (type === 'manga') {
+            currentSelection.manga = value;
+            currentSelection.mangaPrice = price;
+            document.querySelectorAll('.manga-btn').forEach(b => b.classList.remove('active'));
+        } else if (type === 'version') {
+            currentSelection.version = value;
+            currentSelection.versionPrice = price;
+            document.querySelectorAll('.version-btn').forEach(b => b.classList.remove('active'));
+        }
+        btn.classList.add('active');
+        updatePriceDisplay();
+    }
+
+    document.getElementById('patch-select').addEventListener('change', function(e) {
+        currentSelection.patchPrice = e.target.value === "Ninguno" ? 0 : 2;
+        updatePriceDisplay();
+    });
+
+    document.getElementById('custom-name').addEventListener('input', updatePriceDisplay);
+    document.getElementById('custom-number').addEventListener('input', updatePriceDisplay);
+
+    function updatePriceDisplay() {
+        const hasCustom = document.getElementById('custom-name').value || document.getElementById('custom-number').value;
+        const customPrice = hasCustom ? 3 : 0;
+        const total = currentSelection.basePrice + currentSelection.mangaPrice + currentSelection.versionPrice + currentSelection.patchPrice + customPrice;
+        document.getElementById('detail-price').innerText = total + "€";
+    }
+
+    // --- CARRITO ---
+    window.addToCartCurrentProduct = function() {
+        if(!currentSelection.size) {
+            document.getElementById('error-msg').classList.remove('hidden');
+            return;
+        }
+
+        const customName = document.getElementById('custom-name').value.trim().toUpperCase();
+        const customNumber = document.getElementById('custom-number').value.trim();
+        const customPrice = (customName || customNumber) ? 3 : 0;
+        const finalPrice = currentSelection.basePrice + currentSelection.mangaPrice + currentSelection.versionPrice + currentSelection.patchPrice + customPrice;
+
+        const cartItem = {
+            ...currentProduct,
+            finalPrice: finalPrice,
+            selection: { ...currentSelection, customName, customNumber, patch: document.getElementById('patch-select').value }
+        };
+
+        let cart = JSON.parse(localStorage.getItem('rccamis_cart')) || [];
+        cart.push(cartItem);
+        localStorage.setItem('rccamis_cart', JSON.stringify(cart));
+        
+        window.updateCartUI();
+        showToast("¡Añadido al carrito!");
+        showCatalog(currentCollectionID); 
+    }
+
+    window.updateCartUI = function() {
+        const cart = JSON.parse(localStorage.getItem('rccamis_cart')) || [];
+        document.getElementById('cart-badge').innerText = cart.length;
+        document.getElementById('cart-badge').classList.toggle('hidden', cart.length === 0);
+        
+        const list = document.getElementById('cart-items');
+        list.innerHTML = '';
+        let total = 0;
+
+        if (cart.length === 0) list.innerHTML = '<div class="flex flex-col items-center justify-center mt-10 text-slate-400"><span class="material-icons text-4xl mb-2">remove_shopping_cart</span><p>Carrito vacío</p></div>';
+        else {
+            cart.forEach((item, index) => {
+                total += item.finalPrice;
+                let details = `<span class="bg-slate-200 dark:bg-slate-700 px-1 rounded text-xs font-bold">Talla ${item.selection.size}</span>`;
+                if(item.selection.version === 'Jugador') details += ` <span class="text-xs text-primary">+Jugador</span>`;
+                if(item.selection.manga === 'Larga') details += ` <span class="text-xs text-primary">+Manga Larga</span>`;
+                if(item.selection.patch !== 'Ninguno') details += `<br><span class="text-[10px] text-slate-500">Parche: ${item.selection.patch}</span>`;
+                if(item.selection.customName) details += `<br><span class="text-[10px] text-slate-500">Dorsal: ${item.selection.customNumber || ''} ${item.selection.customName}</span>`;
+
+                list.innerHTML += `
+                    <div class="flex gap-3 bg-slate-50 dark:bg-slate-800 p-3 rounded-lg border border-slate-100 dark:border-slate-700">
+                        <img src="${item.image}" class="w-14 h-14 rounded object-cover border dark:border-slate-600">
+                        <div class="flex-1 min-w-0">
+                            <div class="font-bold text-sm truncate dark:text-white">${item.name}</div>
+                            <div class="mt-1 leading-tight">${details}</div>
+                        </div>
+                        <div class="flex flex-col justify-between items-end">
+                            <button onclick="removeItem(${index})" class="text-slate-400 hover:text-red-500 transition-colors"><span class="material-icons text-sm">close</span></button>
+                            <div class="font-bold text-primary">${item.finalPrice}€</div>
+                        </div>
+                    </div>`;
+            });
+        }
+        document.getElementById('cart-total').innerText = total;
+    }
+
+    window.removeItem = function(index) {
+        let cart = JSON.parse(localStorage.getItem('rccamis_cart')) || [];
+        cart.splice(index, 1);
+        localStorage.setItem('rccamis_cart', JSON.stringify(cart));
+        window.updateCartUI();
+    }
+
+    // --- 🔴 INTEGRACIÓN CON INSTAGRAM ---
+    window.generarTextoPedido = function(cart) {
+        let mensaje = "Hola RC Camis! 👋 Quiero realizar este pedido:\n\n";
+        cart.forEach((item) => {
+            mensaje += `👕 *${item.name}* (${item.finalPrice}€)\n`;
+            mensaje += `   • Talla: ${item.selection.size}\n`;
+            if(item.selection.version === 'Jugador') mensaje += `   • Versión: JUGADOR\n`;
+            if(item.selection.manga === 'Larga') mensaje += `   • Manga: LARGA\n`;
+            if(item.selection.patch !== 'Ninguno') mensaje += `   • Parche: ${item.selection.patch}\n`;
+            if(item.selection.customName) mensaje += `   • Custom: ${item.selection.customNumber || ''} - ${item.selection.customName}\n`;
+            mensaje += `----------------\n`;
+        });
+        const total = document.getElementById('cart-total').innerText || cart[0].finalPrice;
+        mensaje += `\n💰 *TOTAL: ${total}€*\n📍 Espero info para el pago!`;
+        return mensaje;
+    }
+
+    window.enviarPedidoInstagram = function() {
+        const cart = JSON.parse(localStorage.getItem('rccamis_cart')) || [];
+        if (cart.length === 0) return showToast("El carrito está vacío", true);
+        
+        const texto = generarTextoPedido(cart);
+        navigator.clipboard.writeText(texto).then(() => {
+            showToast("¡Pedido copiado! Abriendo Instagram...");
+            setTimeout(() => { window.open(`https://ig.me/m/${USUARIO_INSTAGRAM}`, '_blank'); }, 1500);
+        }).catch(err => {
+            alert("Tu navegador bloqueó copiar el texto. Escríbenos a @" + USUARIO_INSTAGRAM);
+        });
+    }
+
+    window.comprarDirectoInstagram = function() {
+        if(!currentSelection.size) {
+            document.getElementById('error-msg').classList.remove('hidden');
+            return;
+        }
+        
+        const customName = document.getElementById('custom-name').value.trim().toUpperCase();
+        const customNumber = document.getElementById('custom-number').value.trim();
+        const customPrice = (customName || customNumber) ? 3 : 0;
+        const total = currentSelection.basePrice + currentSelection.mangaPrice + currentSelection.versionPrice + currentSelection.patchPrice + customPrice;
+
+        const fakeCart = [{
+            name: currentProduct.name, finalPrice: total,
+            selection: { ...currentSelection, customName, customNumber, patch: document.getElementById('patch-select').value }
+        }];
+
+        const texto = generarTextoPedido(fakeCart);
+        navigator.clipboard.writeText(texto).then(() => {
+            showToast("¡Pedido copiado! Abriendo Instagram...");
+            setTimeout(() => { window.open(`https://ig.me/m/${USUARIO_INSTAGRAM}`, '_blank'); }, 1500);
+        });
+    }
+
+    window.comprarMysteryBox = function() {
+        let mensaje = "Hola RC Camis! 👋 Estoy interesado en la *MYSTERY BOX 📦* (25€).\n¿Me podéis decir qué tallas tenéis disponibles para enviar ya?\n";
+        navigator.clipboard.writeText(mensaje).then(() => {
+            showToast("Mensaje copiado. Abriendo Instagram...");
+            setTimeout(() => { window.open(`https://ig.me/m/${USUARIO_INSTAGRAM}`, '_blank'); }, 1500);
+        });
+    }
+
+    window.updateCartUI();
+
+</script>
+
+<script>
+    function toggleCart() {
+        const modal = document.getElementById('cart-modal');
+        const panel = document.getElementById('cart-panel');
+        if (modal.classList.contains('hidden')) {
+            modal.classList.remove('hidden');
+            setTimeout(() => panel.classList.remove('translate-x-full'), 10);
+        } else {
+            panel.classList.add('translate-x-full');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+    }
+</script>
+</body>
+</html>
