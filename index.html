@@ -5,7 +5,9 @@
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>RC Camis | Tienda Oficial de Camisetas de Fútbol</title>
-	
+    
+    <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=EUR"></script>
+
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
@@ -31,7 +33,6 @@
         .dark .option-btn.active { background-color: #e11d48; color: white; border-color: #e11d48; }
         .fade-in { animation: fadeIn 0.4s ease-in-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-        /* Animación Toasts */
         .toast-slide-up { animation: toastSlide 0.3s ease-out forwards; }
         @keyframes toastSlide { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .group:hover .group-hover\:block { display: block; }
@@ -47,7 +48,6 @@
 <header class="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 h-16 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
         <div class="flex items-center justify-between h-full">
-            
             <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="showHome()">
                 <img src="logo-Photoroom.png" alt="RC Camis Logo" class="h-10 md:h-12 w-auto object-contain hover:scale-105 transition-transform duration-300">
                 <span class="ml-3 text-xl font-extrabold tracking-tight uppercase hidden sm:block">RC <span class="text-primary">Camis</span></span>
@@ -183,41 +183,30 @@
         </div>
     </section>
 
-    <section id="mystery-box" class="py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div class="relative rounded-3xl overflow-hidden bg-slate-900 border border-purple-500/30 shadow-2xl shadow-purple-900/20">
+    <section id="mystery-box-banner" class="py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <a href="mysterybox.html" class="block relative rounded-3xl overflow-hidden bg-slate-900 border border-purple-500/30 shadow-2xl shadow-purple-900/20 hover:scale-[1.02] transition-transform duration-300">
             <div class="absolute top-0 right-0 -mr-20 -mt-20 w-72 h-72 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
             <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-72 h-72 bg-pink-600 rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
             
-            <div class="relative z-10 p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
-                <div class="text-center md:text-left md:w-2/3">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 text-xs font-bold uppercase tracking-widest mb-4 border border-purple-500/30">
-                        <span class="material-icons text-sm">card_giftcard</span> Edición Limitada
+            <div class="relative z-10 p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div>
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 text-xs font-bold uppercase tracking-widest mb-3 border border-purple-500/30">
+                        <span class="material-icons text-sm">card_giftcard</span> Experiencia Exclusiva
                     </div>
-                    <h2 class="text-3xl md:text-5xl font-black text-white mb-4">MYSTERY BOX 📦</h2>
-                    <p class="text-purple-100/80 text-lg mb-6 max-w-xl">
-                        ¿No sabes qué elegir? Déjalo en nuestras manos. Recibe una camiseta de fútbol aleatoria (retro, actual o especial) de tu talla. <strong>¡Emoción garantizada!</strong>
-                    </p>
-                    <div class="flex items-center gap-4 justify-center md:justify-start">
-                        <div class="text-4xl font-black text-white">25€</div>
-                        <button onclick="comprarMysteryBox()" class="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold rounded-xl transition-all shadow-lg flex items-center gap-2">
-                            ¡Quiero mi sorpresa! <span class="material-icons text-sm">auto_awesome</span>
-                        </button>
-                    </div>
+                    <h2 class="text-3xl md:text-4xl font-black text-white">MYSTERY BOX 📦</h2>
+                    <p class="text-purple-200 text-sm mt-2 max-w-md">Descubre nuestra caja sorpresa. Elige tu versión (Fan o Retro desde 17€) y dinos qué equipos quieres evitar. ¿Te atreves?</p>
                 </div>
-                <div class="md:w-1/3 flex justify-center">
-                    <div class="text-[120px] filter drop-shadow-2xl transform rotate-12 hover:rotate-0 transition-transform duration-500">
-                        🎁
-                    </div>
+                <div class="bg-white/10 backdrop-blur-md px-6 py-4 rounded-xl border border-white/20 text-white font-bold flex items-center gap-2 whitespace-nowrap">
+                    Configurar mi caja <span class="material-icons">arrow_forward</span>
                 </div>
             </div>
-        </div>
+        </a>
     </section>
 </div>
 
 <div id="catalog-view" class="hidden flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full fade-in">
     <nav class="mb-6 sticky top-16 z-40 bg-background-light/95 dark:bg-background-dark/95 py-2 border-b border-slate-200/50 dark:border-slate-800/50">
-        <div class="flex items-center space-x-2 overflow-x-auto hide-scrollbar pb-2" id="category-menu">
-            </div>
+        <div class="flex items-center space-x-2 overflow-x-auto hide-scrollbar pb-2" id="category-menu"></div>
     </nav>
 
     <div class="flex flex-col md:flex-row gap-4 mb-6">
@@ -244,8 +233,7 @@
         <p class="text-slate-500 mt-4">Sincronizando catálogo...</p>
     </div>
 
-    <div id="products-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-        </div>
+    <div id="products-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6"></div>
     
     <div id="btn-container" class="col-span-full text-center mt-10 hidden">
         <button id="btn-cargar-mas" onclick="cargarMasProductos()" class="px-8 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-full font-bold shadow-sm hover:shadow-md transition-all">
@@ -272,7 +260,8 @@
                 
                 <div class="flex items-end space-x-3 mb-6 border-b border-slate-100 dark:border-slate-700 pb-4">
                     <div class="text-4xl font-black text-primary" id="detail-price">0€</div>
-                    <div class="text-lg text-slate-400 line-through mb-1" id="detail-old-price">0€</div> </div>
+                    <div class="text-lg text-slate-400 line-through mb-1" id="detail-old-price">0€</div> 
+                </div>
 
                 <div class="flex-1 overflow-y-auto pr-2 space-y-6">
                     <div>
@@ -384,12 +373,25 @@
             <button onclick="toggleCart()" class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full"><span class="material-icons">close</span></button>
         </div>
         <div id="cart-items" class="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar"></div>
+        
         <div class="border-t border-slate-100 dark:border-slate-700 pt-6 mt-4">
-            <div class="flex justify-between font-bold text-xl mb-4 text-slate-900 dark:text-white"><span>Total:</span> <span><span id="cart-total">0</span>€</span></div>
-            <button onclick="enviarPedidoInstagram()" class="w-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 text-white font-bold py-4 rounded-xl shadow-lg flex justify-center items-center gap-2 hover:opacity-90 transition-opacity">
-                <span class="material-icons">content_copy</span> Confirmar pedido en Instagram
+            <div class="flex justify-between font-bold text-xl mb-6 text-slate-900 dark:text-white">
+                <span>Total:</span> 
+                <span><span id="cart-total">0</span>€</span>
+            </div>
+            
+            <div id="paypal-button-container" class="mb-4"></div>
+
+            <div class="relative flex items-center py-3">
+                <div class="flex-grow border-t border-slate-200 dark:border-slate-700"></div>
+                <span class="flex-shrink mx-4 text-slate-400 text-[10px] font-bold uppercase tracking-widest">O también</span>
+                <div class="flex-grow border-t border-slate-200 dark:border-slate-700"></div>
+            </div>
+
+            <button onclick="enviarPedidoInstagram()" class="w-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold py-3 rounded-xl flex justify-center items-center gap-2 hover:bg-slate-200 transition-colors text-sm">
+                <span class="material-icons text-sm">camera_alt</span> Confirmar pedido en Instagram
             </button>
-            <p class="text-[11px] text-center text-slate-400 mt-3 px-2">Copiaremos tu pedido y te llevaremos a Instagram. Solo tienes que darle a <strong>Pegar</strong> en nuestro chat.</p>
+            <p class="text-[11px] text-center text-slate-400 mt-3 px-2">Copiaremos tu pedido y te llevaremos a Instagram.</p>
         </div>
     </div>
 </div>
@@ -422,7 +424,7 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, getDocs, limit, query } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, collection, getDocs, limit, query, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyDCxD-IVLjXcQT1LzfLVqy7nPpTZvwEqNnw",
@@ -436,7 +438,6 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // --- ESTADO GLOBAL ---
     let allProducts = []; 
     let currentLimitCount = 20; 
     let currentCollectionID = 'laliga';
@@ -458,7 +459,6 @@
         { id: 'long_sleeve', label: '🧥 M. LARGA' }
     ];
 
-    // --- FUNCIONES UI GLOBALES ---
     window.showToast = function(message, isError = false) {
         const container = document.getElementById('toast-container');
         const toast = document.createElement('div');
@@ -493,7 +493,6 @@
         window.scrollTo(0,0);
     }
 
-    // --- 🔴 MOTOR DE CACHÉ + FIREBASE ---
     window.loadCollectionWithCache = async function(collectionId) {
         const grid = document.getElementById('products-grid');
         const loader = document.getElementById('loader-initial');
@@ -629,7 +628,6 @@
         });
     }
 
-    // --- DETALLE DEL PRODUCTO ---
     window.openProduct = function(productId) {
         currentProduct = allProducts.find(p => p.id === productId);
         if(!currentProduct) return;
@@ -689,7 +687,6 @@
         document.getElementById('detail-price').innerText = total + "€";
     }
 
-    // --- CARRITO ---
     window.addToCartCurrentProduct = function() {
         if(!currentSelection.size) {
             document.getElementById('error-msg').classList.remove('hidden');
@@ -730,10 +727,15 @@
             cart.forEach((item, index) => {
                 total += item.finalPrice;
                 let details = `<span class="bg-slate-200 dark:bg-slate-700 px-1 rounded text-xs font-bold">Talla ${item.selection.size}</span>`;
-                if(item.selection.version === 'Jugador') details += ` <span class="text-xs text-primary">+Jugador</span>`;
-                if(item.selection.manga === 'Larga') details += ` <span class="text-xs text-primary">+Manga Larga</span>`;
-                if(item.selection.patch !== 'Ninguno') details += `<br><span class="text-[10px] text-slate-500">Parche: ${item.selection.patch}</span>`;
-                if(item.selection.customName) details += `<br><span class="text-[10px] text-slate-500">Dorsal: ${item.selection.customNumber || ''} ${item.selection.customName}</span>`;
+                
+                if(item.selection.isMysteryBox) {
+                    if(item.selection.avoid) details += `<br><span class="text-[10px] text-red-500 font-bold">Evitar: ${item.selection.avoid}</span>`;
+                } else {
+                    if(item.selection.version === 'Jugador') details += ` <span class="text-xs text-primary">+Jugador</span>`;
+                    if(item.selection.manga === 'Larga') details += ` <span class="text-xs text-primary">+Manga Larga</span>`;
+                    if(item.selection.patch !== 'Ninguno') details += `<br><span class="text-[10px] text-slate-500">Parche: ${item.selection.patch}</span>`;
+                    if(item.selection.customName) details += `<br><span class="text-[10px] text-slate-500">Dorsal: ${item.selection.customNumber || ''} ${item.selection.customName}</span>`;
+                }
 
                 list.innerHTML += `
                     <div class="flex gap-3 bg-slate-50 dark:bg-slate-800 p-3 rounded-lg border border-slate-100 dark:border-slate-700">
@@ -759,16 +761,32 @@
         window.updateCartUI();
     }
 
-    // --- 🔴 INTEGRACIÓN CON INSTAGRAM ---
+    window.guardarPedidoEnDashboard = async function(cart, total, metodo, transactionId = "N/A") {
+        try {
+            await addDoc(collection(db, "orders"), {
+                items: cart,
+                total: parseFloat(total),
+                metodoPago: metodo,
+                estado: metodo === 'PayPal' ? 'Pagado' : 'Pendiente (Instagram)',
+                transactionId: transactionId,
+                fecha: serverTimestamp()
+            });
+        } catch (e) { console.error("Error guardando estadisticas: ", e); }
+    }
+
     window.generarTextoPedido = function(cart) {
         let mensaje = "Hola RC Camis! 👋 Quiero realizar este pedido:\n\n";
         cart.forEach((item) => {
             mensaje += `👕 *${item.name}* (${item.finalPrice}€)\n`;
             mensaje += `   • Talla: ${item.selection.size}\n`;
-            if(item.selection.version === 'Jugador') mensaje += `   • Versión: JUGADOR\n`;
-            if(item.selection.manga === 'Larga') mensaje += `   • Manga: LARGA\n`;
-            if(item.selection.patch !== 'Ninguno') mensaje += `   • Parche: ${item.selection.patch}\n`;
-            if(item.selection.customName) mensaje += `   • Custom: ${item.selection.customNumber || ''} - ${item.selection.customName}\n`;
+            if(item.selection.isMysteryBox) {
+                if(item.selection.avoid) mensaje += `   • Evitar: ${item.selection.avoid}\n`;
+            } else {
+                if(item.selection.version === 'Jugador') mensaje += `   • Versión: JUGADOR\n`;
+                if(item.selection.manga === 'Larga') mensaje += `   • Manga: LARGA\n`;
+                if(item.selection.patch && item.selection.patch !== 'Ninguno') mensaje += `   • Parche: ${item.selection.patch}\n`;
+                if(item.selection.customName) mensaje += `   • Custom: ${item.selection.customNumber || ''} - ${item.selection.customName}\n`;
+            }
             mensaje += `----------------\n`;
         });
         const total = document.getElementById('cart-total').innerText || cart[0].finalPrice;
@@ -780,7 +798,9 @@
         const cart = JSON.parse(localStorage.getItem('rccamis_cart')) || [];
         if (cart.length === 0) return showToast("El carrito está vacío", true);
         
-        const texto = generarTextoPedido(cart);
+        window.guardarPedidoEnDashboard(cart, document.getElementById('cart-total').innerText, 'Instagram');
+
+        const texto = window.generarTextoPedido(cart);
         navigator.clipboard.writeText(texto).then(() => {
             showToast("¡Pedido copiado! Abriendo Instagram...");
             setTimeout(() => { window.open(`https://ig.me/m/${USUARIO_INSTAGRAM}`, '_blank'); }, 1500);
@@ -805,22 +825,25 @@
             selection: { ...currentSelection, customName, customNumber, patch: document.getElementById('patch-select').value }
         }];
 
-        const texto = generarTextoPedido(fakeCart);
+        window.guardarPedidoEnDashboard(fakeCart, total, 'Instagram');
+
+        const texto = window.generarTextoPedido(fakeCart);
         navigator.clipboard.writeText(texto).then(() => {
             showToast("¡Pedido copiado! Abriendo Instagram...");
             setTimeout(() => { window.open(`https://ig.me/m/${USUARIO_INSTAGRAM}`, '_blank'); }, 1500);
         });
     }
 
-    window.comprarMysteryBox = function() {
-        let mensaje = "Hola RC Camis! 👋 Estoy interesado en la *MYSTERY BOX 📦* (25€).\n¿Me podéis decir qué tallas tenéis disponibles para enviar ya?\n";
-        navigator.clipboard.writeText(mensaje).then(() => {
-            showToast("Mensaje copiado. Abriendo Instagram...");
-            setTimeout(() => { window.open(`https://ig.me/m/${USUARIO_INSTAGRAM}`, '_blank'); }, 1500);
-        });
-    }
-
     window.updateCartUI();
+
+    // AUTO ABRIR CARRITO SI VIENE DE MYSTERYBOX.HTML
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('cart') === 'open') {
+            toggleCart();
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    });
 
 </script>
 
@@ -836,6 +859,61 @@
             setTimeout(() => modal.classList.add('hidden'), 300);
         }
     }
+
+    paypal.Buttons({
+        style: {
+            layout: 'vertical',
+            color:  'gold',
+            shape:  'rect',
+            label:  'pay'
+        },
+        createOrder: function(data, actions) {
+            const totalStr = document.getElementById('cart-total').innerText;
+            const totalAmount = parseFloat(totalStr);
+            
+            if (isNaN(totalAmount) || totalAmount <= 0) {
+                window.showToast("El carrito está vacío", true);
+                return;
+            }
+            
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: totalAmount.toFixed(2)
+                    },
+                    description: "Pedido RC Camis"
+                }]
+            });
+        },
+        onApprove: function(data, actions) {
+            return actions.order.capture().then(function(orderData) {
+                const transaction = orderData.purchase_units[0].payments.captures[0];
+                const cart = JSON.parse(localStorage.getItem('rccamis_cart')) || [];
+                
+                window.showToast("✅ ¡Pago completado con éxito!");
+                
+                window.guardarPedidoEnDashboard(cart, transaction.amount.value, 'PayPal', transaction.id);
+
+                let texto = "✅ *PEDIDO PAGADO POR PAYPAL*\n";
+                texto += `ID Transacción: ${transaction.id}\n\n`;
+                texto += window.generarTextoPedido(cart);
+                
+                navigator.clipboard.writeText(texto).catch(() => {});
+                
+                alert("¡Pago recibido con éxito! Hemos copiado los detalles de tu pedido. Por favor, pégalo en nuestro Instagram para coordinar el envío rápidamente.");
+                
+                localStorage.removeItem('rccamis_cart');
+                window.updateCartUI();
+                toggleCart();
+                
+                window.open(`https://ig.me/m/${USUARIO_INSTAGRAM}`, '_blank');
+            });
+        },
+        onError: function(err) {
+            console.error('Error de PayPal:', err);
+            window.showToast("Hubo un error al procesar el pago", true);
+        }
+    }).render('#paypal-button-container');
 </script>
 </body>
 </html>
