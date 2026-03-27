@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actualizador de Precios | RC Camis Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <nav class="bg-slate-900 text-white p-4 shadow-lg">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-black flex items-center gap-2">
+                <span class="material-icons text-green-400">price_change</span> 
+                RC CAMIS <span class="font-light">| PRECIOS</span>
+            </h1>
+            <div class="flex gap-4">
+                <a href="dashboard.html" class="text-sm text-slate-300 hover:text-white transition-colors">Dashboard</a>
+                <a href="index.html" class="text-sm text-slate-300 hover:text-white transition-colors">Ver Tienda</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-4xl mx-auto p-6 w-full mt-8">
+        <header class="mb-8">
+            <h2 class="text-3xl font-black text-slate-900">Actualizador Masivo de Precios</h2>
+            <p class="text-slate-500 mt-2">Cambia el precio base de todas tus camisetas en Firebase con un solo clic.</p>
+        </header>
+
+        <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <div class="space-y-3">
+                    <div class="flex items-center gap-2 text-slate-700 font-bold border-b border-slate-100 pb-2">
+                        <span class="material-icons text-blue-500">public</span> Ligas Estándar
+                    </div>
+                    <p class="text-xs text-slate-400 h-10">Afecta a LaLiga, Premier, Serie A, Selecciones, MLS, etc.</p>
+                    <div class="relative">
+                        <input type="number" id="price-standard" placeholder="Ej: 20" class="w-full border border-slate-300 rounded-lg p-3 pl-8 bg-slate-50 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none font-bold text-lg">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold">€</span>
+                    </div>
+                    <label class="flex items-center gap-2 text-sm font-bold cursor-pointer mt-2 bg-blue-50 text-blue-700 p-2 rounded">
+                        <input type="checkbox" id="check-standard" class="w-4 h-4 text-blue-600 rounded">
+                        Actualizar estas
+                    </label>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="flex items-center gap-2 text-slate-700 font-bold border-b border-slate-100 pb-2">
+                        <span class="material-icons text-amber-500">history_edu</span> Joyas Retro
+                    </div>
+                    <p class="text-xs text-slate-400 h-10">Afecta únicamente a la colección de camisetas clásicas.</p>
+                    <div class="relative">
+                        <input type="number" id="price-retro" placeholder="Ej: 25" class="w-full border border-slate-300 rounded-lg p-3 pl-8 bg-slate-50 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none font-bold text-lg">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold">€</span>
+                    </div>
+                    <label class="flex items-center gap-2 text-sm font-bold cursor-pointer mt-2 bg-amber-50 text-amber-700 p-2 rounded">
+                        <input type="checkbox" id="check-retro" class="w-4 h-4 text-amber-600 rounded">
+                        Actualizar estas
+                    </label>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="flex items-center gap-2 text-slate-700 font-bold border-b border-slate-100 pb-2">
+                        <span class="material-icons text-purple-500">dry_cleaning</span> Manga Larga
+                    </div>
+                    <p class="text-xs text-slate-400 h-10">Afecta a la colección dedicada enteramente a manga larga.</p>
+                    <div class="relative">
+                        <input type="number" id="price-longsleeve" placeholder="Ej: 23" class="w-full border border-slate-300 rounded-lg p-3 pl-8 bg-slate-50 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 outline-none font-bold text-lg">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold">€</span>
+                    </div>
+                    <label class="flex items-center gap-2 text-sm font-bold cursor-pointer mt-2 bg-purple-50 text-purple-700 p-2 rounded">
+                        <input type="checkbox" id="check-longsleeve" class="w-4 h-4 text-purple-600 rounded">
+                        Actualizar estas
+                    </label>
+                </div>
+
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-slate-100 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="text-sm text-slate-500 flex items-center gap-2">
+                    <span class="material-icons text-amber-500 text-sm">warning</span>
+                    Nota: La versión Jugador (+3€) se suma sola en la web.
+                </div>
+                <button id="btn-update" onclick="iniciarActualizacion()" class="w-full md:w-auto bg-slate-900 text-white px-8 py-4 rounded-xl font-black hover:bg-slate-800 transition-all shadow-lg flex items-center justify-center gap-2">
+                    <span class="material-icons">save</span> APLICAR NUEVOS PRECIOS
+                </button>
+            </div>
+        </div>
+
+        <div id="log-container" class="mt-8 bg-slate-900 rounded-xl p-6 hidden">
+            <h3 class="text-white font-bold mb-4 flex items-center gap-2"><span class="material-icons animate-spin text-green-400">sync</span> Procesando actualización...</h3>
+            <div id="logs" class="space-y-2 text-xs font-mono text-green-400 max-h-48 overflow-y-auto"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, doc, writeBatch } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDCxD-IVLjXcQT1LzfLVqy7nPpTZvwEqNnw",
+            authDomain: "rccamis-store.firebaseapp.com",
+            projectId: "rccamis-store",
+            storageBucket: "rccamis-store.appspot.com",
+            messagingSenderId: "1036696205279",
+            appId: "1:1036696205279:web:4bf61aa2503a41a6c5366a"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Agrupación de colecciones
+        const coleccionesEstandar = ['laliga', 'premier', 'national_teams', 'seriea', 'bundesliga', 'ligue1', 'brasileiro', 'argentina', 'mls', 'ligamx'];
+        const coleccionesRetro = ['retro'];
+        const coleccionesMangaLarga = ['long_sleeve'];
+
+        function addLog(msg) {
+            const logsDiv = document.getElementById('logs');
+            logsDiv.innerHTML += `<div>> ${msg}</div>`;
+            logsDiv.scrollTop = logsDiv.scrollHeight;
+        }
+
+        window.iniciarActualizacion = async function() {
+            const btn = document.getElementById('btn-update');
+            const logContainer = document.getElementById('log-container');
+            
+            const doStandard = document.getElementById('check-standard').checked;
+            const doRetro = document.getElementById('check-retro').checked;
+            const doLongSleeve = document.getElementById('check-longsleeve').checked;
+
+            const valStandard = parseFloat(document.getElementById('price-standard').value);
+            const valRetro = parseFloat(document.getElementById('price-retro').value);
+            const valLongSleeve = parseFloat(document.getElementById('price-longsleeve').value);
+
+            // Validaciones
+            if (!doStandard && !doRetro && !doLongSleeve) {
+                return alert("Selecciona al menos una categoría marcando la casilla 'Actualizar estas'.");
+            }
+            if ((doStandard && isNaN(valStandard)) || (doRetro && isNaN(valRetro)) || (doLongSleeve && isNaN(valLongSleeve))) {
+                return alert("Por favor, escribe un precio válido en las categorías seleccionadas.");
+            }
+
+            const confirmar = confirm("⚠️ ¿Estás seguro de que quieres cambiar los precios de TODA LA BASE DE DATOS en las colecciones seleccionadas?");
+            if (!confirmar) return;
+
+            btn.disabled = true;
+            btn.innerHTML = `<span class="material-icons animate-spin">refresh</span> ACTUALIZANDO...`;
+            logContainer.classList.remove('hidden');
+            document.getElementById('logs').innerHTML = "";
+
+            try {
+                // 1. Actualizar Ligas Estándar
+                if (doStandard) {
+                    addLog(`Iniciando Ligas Estándar. Nuevo precio: ${valStandard}€`);
+                    await procesarColecciones(coleccionesEstandar, valStandard);
+                }
+
+                // 2. Actualizar Retro
+                if (doRetro) {
+                    addLog(`Iniciando Retro. Nuevo precio: ${valRetro}€`);
+                    await procesarColecciones(coleccionesRetro, valRetro);
+                }
+
+                // 3. Actualizar Manga Larga
+                if (doLongSleeve) {
+                    addLog(`Iniciando Manga Larga. Nuevo precio: ${valLongSleeve}€`);
+                    await procesarColecciones(coleccionesMangaLarga, valLongSleeve);
+                }
+
+                addLog("✅ ¡PROCESO FINALIZADO CON ÉXITO!");
+                addLog("💡 IMPORTANTE: Recuerda que los clientes pueden ver los precios antiguos durante 24h debido a la memoria Caché de sus navegadores. Para forzar que vean los nuevos precios, diles que recarguen la web o cambia el nombre de la variable de caché en tu index.html.");
+
+                btn.classList.replace('bg-slate-900', 'bg-green-600');
+                btn.innerHTML = `<span class="material-icons">check_circle</span> PRECIOS ACTUALIZADOS`;
+
+            } catch (error) {
+                console.error(error);
+                addLog(`<span class="text-red-500">❌ ERROR CRÍTICO: ${error.message}</span>`);
+                btn.disabled = false;
+                btn.innerHTML = `<span class="material-icons">save</span> REINTENTAR`;
+            }
+        }
+
+        async function procesarColecciones(coleccionesArray, nuevoPrecio) {
+            for (const nombreColeccion of coleccionesArray) {
+                addLog(`Leyendo colección: ${nombreColeccion}...`);
+                const colRef = collection(db, nombreColeccion);
+                const snapshot = await getDocs(colRef);
+                
+                let batch = writeBatch(db);
+                let contador = 0;
+                let totalActualizados = 0;
+
+                for (const documento of snapshot.docs) {
+                    const docRef = doc(db, nombreColeccion, documento.id);
+                    batch.update(docRef, { price: nuevoPrecio });
+                    contador++;
+                    totalActualizados++;
+
+                    // Firebase limita los batch a 500 operaciones. Mandamos de 400 en 400 por seguridad.
+                    if (contador === 400) {
+                        await batch.commit();
+                        batch = writeBatch(db); // Crear nuevo batch
+                        contador = 0;
+                        addLog(`  Lote guardado (400 items)...`);
+                    }
+                }
+
+                // Guardar los que sobren en el último batch
+                if (contador > 0) {
+                    await batch.commit();
+                }
+
+                addLog(`✔️ ${nombreColeccion} terminada. (${totalActualizados} productos actualizados)`);
+            }
+        }
+    </script>
+</body>
+</html>
