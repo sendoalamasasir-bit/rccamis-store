@@ -41,7 +41,6 @@
 <body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 transition-colors duration-200 flex flex-col min-h-screen">
 
 <script>
-    // 🔴 PON AQUÍ TU USUARIO DE INSTAGRAM (Sin el @)
     const USUARIO_INSTAGRAM = "rccamis"; 
 </script>
 
@@ -243,7 +242,7 @@
 </div>
 
 <div id="product-detail-view" class="hidden flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full fade-in pb-20">
-    <button onclick="showCatalog(currentCollectionID)" class="mb-4 text-sm text-slate-500 hover:text-primary flex items-center gap-1 font-medium">
+    <button onclick="volverAlCatalogo()" class="mb-4 text-sm text-slate-500 hover:text-primary flex items-center gap-1 font-medium">
         <span class="material-icons text-sm">arrow_back</span> Volver al catálogo
     </button>
 
@@ -318,7 +317,7 @@
 
                     <div class="bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-dashed border-slate-300 dark:border-slate-600">
                         <div class="flex items-center justify-between mb-3">
-                            <span class="font-bold text-sm flex items-center"><span class="material-icons text-primary text-sm mr-2">edit</span> Personalizar (opcional)</span>
+                            <span class="font-bold text-sm flex items-center"><span class="material-icons text-primary text-sm mr-2">edit</span> Personalizar (+3€)</span>
                             <span class="text-xs bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded text-slate-500">Opcional</span>
                         </div>
                         <div class="grid grid-cols-3 gap-3">
@@ -340,9 +339,6 @@
                     <button onclick="addToCartCurrentProduct()" class="w-full bg-slate-900 dark:bg-white dark:text-slate-900 text-white font-bold py-4 rounded-xl hover:opacity-90 transition-all flex items-center justify-center shadow-lg">
                         <span class="material-icons mr-2">shopping_bag</span> Añadir al Carrito
                     </button>
-                    <button onclick="comprarDirectoInstagram()" class="w-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 text-white font-bold py-4 rounded-xl hover:opacity-90 transition-all flex items-center justify-center shadow-lg">
-                        <span class="material-icons mr-2">camera_alt</span> Comprar por Instagram
-                    </button>
                 </div>
             </div>
         </div>
@@ -356,10 +352,60 @@
             <h3 class="font-bold text-lg">Guía de Tallas</h3>
             <button onclick="toggleSizeGuide()" class="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"><span class="material-icons">close</span></button>
         </div>
-        <div class="p-4 bg-slate-100 dark:bg-slate-800 flex justify-center overflow-auto max-h-[60vh]">
-            <img src="tallas.png" alt="Guía de Tallas" class="max-w-full h-auto rounded shadow-sm">
+        
+        <div class="p-4 bg-slate-50 dark:bg-slate-800 overflow-auto max-h-[60vh] space-y-6">
+            <div>
+                <h4 class="font-bold text-slate-900 dark:text-white mb-1 text-center">Versión Fan & Retro</h4>
+                <p class="text-xs text-primary font-bold text-center mb-3 bg-primary/10 py-1 rounded-md">¡Nota: La versión fan y la retro tallan igual!</p>
+                <div class="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
+                    <table class="w-full text-xs text-center text-slate-600 dark:text-slate-300 border-collapse">
+                        <thead class="bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold">
+                            <tr>
+                                <th class="p-2 border-b border-slate-200 dark:border-slate-600">TALLA</th>
+                                <th class="p-2 border-b border-slate-200 dark:border-slate-600">Largo (cm)</th>
+                                <th class="p-2 border-b border-slate-200 dark:border-slate-600">Ancho (cm)</th>
+                                <th class="p-2 border-b border-slate-200 dark:border-slate-600">Altura (cm)</th>
+                                <th class="p-2 border-b border-slate-200 dark:border-slate-600">Peso (kg)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 dark:divide-slate-700 bg-white dark:bg-slate-800">
+                            <tr><td class="p-2 font-bold">S</td><td class="p-2">69-71</td><td class="p-2">53-55</td><td class="p-2">162-170</td><td class="p-2">50-62</td></tr>
+                            <tr><td class="p-2 font-bold">M</td><td class="p-2">71-73</td><td class="p-2">55-57</td><td class="p-2">170-176</td><td class="p-2">62-78</td></tr>
+                            <tr><td class="p-2 font-bold">L</td><td class="p-2">73-75</td><td class="p-2">57-58</td><td class="p-2">176-182</td><td class="p-2">78-83</td></tr>
+                            <tr><td class="p-2 font-bold">XL</td><td class="p-2">75-78</td><td class="p-2">58-60</td><td class="p-2">182-190</td><td class="p-2">83-90</td></tr>
+                            <tr><td class="p-2 font-bold">XXL</td><td class="p-2">78-81</td><td class="p-2">60-62</td><td class="p-2">190-195</td><td class="p-2">90-97</td></tr>
+                            <tr><td class="p-2 font-bold">XXXL</td><td class="p-2">81-83</td><td class="p-2">62-64</td><td class="p-2">192-197</td><td class="p-2">97-104</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="font-bold text-slate-900 dark:text-white mb-2 text-center">Versión Jugador (Player)</h4>
+                <div class="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
+                    <table class="w-full text-xs text-center text-slate-600 dark:text-slate-300 border-collapse">
+                        <thead class="bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold">
+                            <tr>
+                                <th class="p-2 border-b border-slate-200 dark:border-slate-600">TALLA</th>
+                                <th class="p-2 border-b border-slate-200 dark:border-slate-600">Largo (cm)</th>
+                                <th class="p-2 border-b border-slate-200 dark:border-slate-600">Ancho (cm)</th>
+                                <th class="p-2 border-b border-slate-200 dark:border-slate-600">Altura (cm)</th>
+                                <th class="p-2 border-b border-slate-200 dark:border-slate-600">Peso (kg)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 dark:divide-slate-700 bg-white dark:bg-slate-800">
+                            <tr><td class="p-2 font-bold">S</td><td class="p-2">69-69</td><td class="p-2">49-51</td><td class="p-2">162-170</td><td class="p-2">50-62</td></tr>
+                            <tr><td class="p-2 font-bold">M</td><td class="p-2">69-71</td><td class="p-2">51-53</td><td class="p-2">170-176</td><td class="p-2">62-78</td></tr>
+                            <tr><td class="p-2 font-bold">L</td><td class="p-2">71-73</td><td class="p-2">53-55</td><td class="p-2">176-182</td><td class="p-2">78-83</td></tr>
+                            <tr><td class="p-2 font-bold">XL</td><td class="p-2">73-75</td><td class="p-2">55-57</td><td class="p-2">182-190</td><td class="p-2">83-90</td></tr>
+                            <tr><td class="p-2 font-bold">XXL</td><td class="p-2">75-77</td><td class="p-2">57-59</td><td class="p-2">190-195</td><td class="p-2">90-97</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-        <div class="p-4 text-xs text-slate-500 text-center border-t border-slate-100 dark:border-slate-800">
+        
+        <div class="p-4 text-xs text-slate-500 text-center border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900">
             <strong>Consejo:</strong> Si eliges la versión <em>Jugador</em>, recomendamos pedir una talla superior a la habitual, ya que tienen un corte más entallado.
         </div>
     </div>
@@ -374,8 +420,18 @@
         </div>
         <div id="cart-items" class="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar"></div>
         
-        <div class="border-t border-slate-100 dark:border-slate-700 pt-6 mt-4">
-            <div class="flex justify-between font-bold text-xl mb-6 text-slate-900 dark:text-white">
+        <div class="border-t border-slate-100 dark:border-slate-700 pt-4 mt-4">
+            <label class="text-[10px] font-bold text-slate-500 uppercase mb-2 block">¿Tienes un código de descuento?</label>
+            <div class="flex gap-2">
+                <input type="text" id="discount-input" placeholder="Código (Ej: RC24)" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm px-3 py-2 outline-none focus:border-primary uppercase">
+                <button onclick="applyDiscountCode()" class="bg-slate-900 dark:bg-white dark:text-slate-900 text-white px-4 py-2 rounded-lg text-sm font-bold hover:opacity-90 transition-opacity">Aplicar</button>
+            </div>
+            <p id="discount-msg" class="hidden text-xs font-bold mt-2"></p>
+        </div>
+
+        <div class="border-t border-slate-100 dark:border-slate-700 pt-4 mt-4">
+            <div id="cart-discount-container"></div>
+            <div class="flex justify-between font-black text-xl mb-6 text-slate-900 dark:text-white">
                 <span>Total:</span> 
                 <span><span id="cart-total">0</span>€</span>
             </div>
@@ -430,7 +486,11 @@
         apiKey: "AIzaSyDCxD-IVLjXcQT1LzfLVqy7nPpTZvwEqNnw",
         authDomain: "rccamis-store.firebaseapp.com",
         projectId: "rccamis-store",
-        storageBucket: "rccamis-store.appspot.com",
+        
+        // ⚠️ OJO AQUÍ: Este tiene que ser EXACTAMENTE el mismo nombre que pusiste en el subidor.html para que no te dé error.
+        // Si en el subidor le pusiste .firebasestorage.app, cámbialo aquí también.
+        storageBucket: "rccamis-store.appspot.com", 
+        
         messagingSenderId: "1036696205279",
         appId: "1:1036696205279:web:4bf61aa2503a41a6c5366a"
     };
@@ -439,10 +499,13 @@
     const db = getFirestore(app);
 
     let allProducts = []; 
+    let allLongSleeveProducts = []; 
     let currentLimitCount = 20; 
-    let currentCollectionID = 'laliga';
+    let currentCollectionID = 'laliga'; // ⚠️ OJO AQUÍ: Tu catálogo por defecto carga "laliga". Si el subidor lo sube a "camisetas", tienes que cambiar esto a 'camisetas'.
     let currentProduct = null;
     let currentSelection = { size: null, manga: 'Corta', mangaPrice: 0, version: 'Aficionado', versionPrice: 0, basePrice: 0, patchPrice: 0 };
+    
+    window.isDiscountApplied = false;
 
     const categories = [
         { id: 'laliga', label: '🇪🇸 LALIGA' },
@@ -458,6 +521,31 @@
         { id: 'ligamx', label: '🇲🇽 MÉXICO' },
         { id: 'long_sleeve', label: '🧥 M. LARGA' }
     ];
+
+    window.preCargarMangaLarga = async function() {
+        try {
+            const cacheKey = 'rc_cache_long_sleeve';
+            const timeKey = 'rc_time_long_sleeve';
+            const cachedData = localStorage.getItem(cacheKey);
+            const cacheTime = localStorage.getItem(timeKey);
+            const now = Date.now();
+            
+            // ⚠️ CAMBIADO A 0 PARA QUE NO GUARDE CACHÉ MIENTRAS PRUEBAS
+            const horasValidez = 24 * 60 * 60 * 1000; 
+
+            if (cachedData && cacheTime && (now - cacheTime < horasValidez)) {
+                allLongSleeveProducts = JSON.parse(cachedData);
+            } else {
+                const q = query(collection(db, 'long_sleeve'), limit(1000));
+                const snap = await getDocs(q);
+                allLongSleeveProducts = [];
+                snap.forEach(doc => allLongSleeveProducts.push({ ...doc.data(), id: doc.id }));
+                localStorage.setItem(cacheKey, JSON.stringify(allLongSleeveProducts));
+                localStorage.setItem(timeKey, now.toString());
+            }
+        } catch(e) { console.error("Error pre-cargando manga larga", e); }
+    }
+    preCargarMangaLarga();
 
     window.showToast = function(message, isError = false) {
         const container = document.getElementById('toast-container');
@@ -493,6 +581,10 @@
         window.scrollTo(0,0);
     }
 
+    window.volverAlCatalogo = function() {
+        showCatalog(currentCollectionID);
+    }
+
     window.loadCollectionWithCache = async function(collectionId) {
         const grid = document.getElementById('products-grid');
         const loader = document.getElementById('loader-initial');
@@ -510,7 +602,9 @@
         const cachedData = localStorage.getItem(cacheKey);
         const cacheTime = localStorage.getItem(timeKey);
         const now = Date.now();
-        const horasValidez = 24 * 60 * 60 * 1000; 
+        
+        // ⚠️ CAMBIADO A 0 PARA QUE NO GUARDE CACHÉ MIENTRAS PRUEBAS
+        const horasValidez = 0; 
 
         if (cachedData && cacheTime && (now - cacheTime < horasValidez)) {
             allProducts = JSON.parse(cachedData);
@@ -524,7 +618,7 @@
                 snap.forEach(doc => {
                     const data = doc.data();
                     const price = parseFloat(data.price) || 20;
-                    const oldPrice = Math.floor(price * 1.35); 
+                    const oldPrice = (collectionId === 'retro') ? 100 : 80;
                     allProducts.push({ ...data, id: doc.id, price: price, oldPrice: oldPrice });
                 });
 
@@ -645,8 +739,7 @@
 
         document.getElementById('detail-image').src = currentProduct.image;
         document.getElementById('detail-title').innerText = currentProduct.name;
-        document.getElementById('detail-old-price').innerText = currentProduct.oldPrice + "€";
-
+        
         updatePriceDisplay();
 
         document.getElementById('catalog-view').classList.add('hidden');
@@ -655,6 +748,48 @@
     }
 
     window.selectOption = function(type, value, price, btn) {
+        
+        if (type === 'version' || type === 'manga') {
+            let tempVersion = (type === 'version') ? value : currentSelection.version;
+            let tempManga = (type === 'manga') ? value : currentSelection.manga;
+            
+            let isJugador = (tempVersion === 'Jugador');
+            let isMangaLarga = (tempManga === 'Larga');
+            
+            let baseName = currentProduct.name.toLowerCase()
+                .replace(/\b(version fan|version jugador|retro|version para niños)\b/g, '')
+                .replace(/\bmanga larga\b/g, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+
+            let isAvailable = false;
+            let catalogo = [...allProducts, ...allLongSleeveProducts];
+            
+            for (let p of catalogo) {
+                let pName = p.name.toLowerCase();
+                if (!pName.includes(baseName)) continue;
+                
+                let hasJugador = pName.includes('jugador');
+                let hasLarga = pName.includes('manga larga');
+                
+                if (isJugador !== hasJugador) continue;
+                if (isMangaLarga !== hasLarga) continue;
+                
+                isAvailable = true;
+                break;
+            }
+
+            if (!isAvailable) {
+                let msg = "❌ Esta camiseta no está disponible en ";
+                if(isJugador && isMangaLarga) msg += "Versión Jugador + Manga Larga.";
+                else if(isJugador) msg += "Versión Jugador.";
+                else if(isMangaLarga) msg += "Manga Larga.";
+                else msg += "esta combinación.";
+                
+                return showToast(msg, true);
+            }
+        }
+
         if(type === 'size') {
             currentSelection.size = value;
             document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
@@ -685,6 +820,14 @@
         const customPrice = hasCustom ? 3 : 0;
         const total = currentSelection.basePrice + currentSelection.mangaPrice + currentSelection.versionPrice + currentSelection.patchPrice + customPrice;
         document.getElementById('detail-price').innerText = total + "€";
+
+        let oldPrice = 80; 
+        if (currentCollectionID === 'retro') {
+            oldPrice = 100;
+        } else if (currentSelection.version === 'Jugador') {
+            oldPrice = 90;
+        }
+        document.getElementById('detail-old-price').innerText = oldPrice + "€";
     }
 
     window.addToCartCurrentProduct = function() {
@@ -713,6 +856,23 @@
         showCatalog(currentCollectionID); 
     }
 
+    window.applyDiscountCode = function() {
+        const code = document.getElementById('discount-input').value.trim().toUpperCase();
+        const msgEl = document.getElementById('discount-msg');
+        
+        if (code === 'RC24') {
+            window.isDiscountApplied = true;
+            msgEl.innerText = "¡Código RC24 aplicado! (-5€ por camiseta)";
+            msgEl.className = "text-xs font-bold mt-2 text-green-500 block";
+            updateCartUI();
+        } else {
+            window.isDiscountApplied = false;
+            msgEl.innerText = "El código introducido no es válido.";
+            msgEl.className = "text-xs font-bold mt-2 text-red-500 block";
+            updateCartUI();
+        }
+    }
+
     window.updateCartUI = function() {
         const cart = JSON.parse(localStorage.getItem('rccamis_cart')) || [];
         document.getElementById('cart-badge').innerText = cart.length;
@@ -720,12 +880,16 @@
         
         const list = document.getElementById('cart-items');
         list.innerHTML = '';
-        let total = 0;
+        let subtotal = 0;
 
-        if (cart.length === 0) list.innerHTML = '<div class="flex flex-col items-center justify-center mt-10 text-slate-400"><span class="material-icons text-4xl mb-2">remove_shopping_cart</span><p>Carrito vacío</p></div>';
-        else {
+        if (cart.length === 0) {
+            list.innerHTML = '<div class="flex flex-col items-center justify-center mt-10 text-slate-400"><span class="material-icons text-4xl mb-2">remove_shopping_cart</span><p>Carrito vacío</p></div>';
+            window.isDiscountApplied = false;
+            document.getElementById('discount-input').value = "";
+            document.getElementById('discount-msg').classList.add('hidden');
+        } else {
             cart.forEach((item, index) => {
-                total += item.finalPrice;
+                subtotal += item.finalPrice;
                 let details = `<span class="bg-slate-200 dark:bg-slate-700 px-1 rounded text-xs font-bold">Talla ${item.selection.size}</span>`;
                 
                 if(item.selection.isMysteryBox) {
@@ -751,7 +915,25 @@
                     </div>`;
             });
         }
-        document.getElementById('cart-total').innerText = total;
+        
+        let totalFinal = subtotal;
+        let discountHtml = '';
+
+        if (window.isDiscountApplied && cart.length > 0) {
+            const discountAmount = 5 * cart.length;
+            totalFinal = subtotal - discountAmount;
+            if(totalFinal < 0) totalFinal = 0; 
+            
+            discountHtml = `
+                <div class="flex justify-between font-bold text-sm text-green-500 mb-2">
+                    <span>Descuento RC24 (-5€/ud):</span>
+                    <span>-${discountAmount}€</span>
+                </div>
+            `;
+        }
+
+        document.getElementById('cart-discount-container').innerHTML = discountHtml;
+        document.getElementById('cart-total').innerText = totalFinal;
     }
 
     window.removeItem = function(index) {
@@ -789,8 +971,13 @@
             }
             mensaje += `----------------\n`;
         });
+        
+        if (window.isDiscountApplied) {
+            mensaje += `\n🎁 *CÓDIGO APLICADO: RC24 (-5€ por camiseta)*`;
+        }
+        
         const total = document.getElementById('cart-total').innerText || cart[0].finalPrice;
-        mensaje += `\n💰 *TOTAL: ${total}€*\n📍 Espero info para el pago!`;
+        mensaje += `\n💰 *TOTAL FINAL: ${total}€*\n📍 Espero info para el pago!`;
         return mensaje;
     }
 
@@ -809,34 +996,8 @@
         });
     }
 
-    window.comprarDirectoInstagram = function() {
-        if(!currentSelection.size) {
-            document.getElementById('error-msg').classList.remove('hidden');
-            return;
-        }
-        
-        const customName = document.getElementById('custom-name').value.trim().toUpperCase();
-        const customNumber = document.getElementById('custom-number').value.trim();
-        const customPrice = (customName || customNumber) ? 3 : 0;
-        const total = currentSelection.basePrice + currentSelection.mangaPrice + currentSelection.versionPrice + currentSelection.patchPrice + customPrice;
-
-        const fakeCart = [{
-            name: currentProduct.name, finalPrice: total,
-            selection: { ...currentSelection, customName, customNumber, patch: document.getElementById('patch-select').value }
-        }];
-
-        window.guardarPedidoEnDashboard(fakeCart, total, 'Instagram');
-
-        const texto = window.generarTextoPedido(fakeCart);
-        navigator.clipboard.writeText(texto).then(() => {
-            showToast("¡Pedido copiado! Abriendo Instagram...");
-            setTimeout(() => { window.open(`https://ig.me/m/${USUARIO_INSTAGRAM}`, '_blank'); }, 1500);
-        });
-    }
-
     window.updateCartUI();
 
-    // AUTO ABRIR CARRITO SI VIENE DE MYSTERYBOX.HTML
     window.addEventListener('DOMContentLoaded', (event) => {
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('cart') === 'open') {
@@ -903,6 +1064,7 @@
                 alert("¡Pago recibido con éxito! Hemos copiado los detalles de tu pedido. Por favor, pégalo en nuestro Instagram para coordinar el envío rápidamente.");
                 
                 localStorage.removeItem('rccamis_cart');
+                window.isDiscountApplied = false;
                 window.updateCartUI();
                 toggleCart();
                 
