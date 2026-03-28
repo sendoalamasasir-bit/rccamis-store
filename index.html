@@ -743,7 +743,7 @@
         });
     }
 
-    window.openProduct = function(productId) {
+window.openProduct = function(productId, vieneDelBotonAtras = false) {
         currentProduct = allProducts.find(p => p.id === productId);
         if(!currentProduct) return;
 
@@ -759,13 +759,20 @@
         document.querySelectorAll('.version-btn')[0].classList.add('active');
 
         document.getElementById('detail-image').src = currentProduct.image;
-        document.getElementById('detail-title').innerText = limpiarTituloFeo(currentProduct.name);
+        
+        // Si pusiste la función de limpiar el título feo, ponla aquí. Si no, déjalo como currentProduct.name
+        document.getElementById('detail-title').innerText = currentProduct.name; 
         
         updatePriceDisplay();
 
         document.getElementById('catalog-view').classList.add('hidden');
         document.getElementById('product-detail-view').classList.remove('hidden');
         window.scrollTo(0,0);
+
+        // 🟢 MAGIA AQUÍ: Guardamos en el historial del móvil que hemos abierto una camiseta
+        if (!vieneDelBotonAtras) {
+            history.pushState({ vista: 'producto', id: productId }, "", "#producto");
+        }
     }
 
     window.selectOption = function(type, value, price, btn) {
@@ -1018,6 +1025,19 @@
     }
 
     window.updateCartUI();
+// 🟢 MAGIA AQUÍ: El vigilante que detecta si pulsas "Atrás" en el móvil o PC
+    window.addEventListener('popstate', function(event) {
+        if (event.state && event.state.vista === 'producto') {
+            // Si el usuario le da hacia adelante para volver a ver la camiseta
+            window.openProduct(event.state.id, true);
+        } else {
+            // Si le da hacia atrás, volvemos al catálogo limpiamente
+            window.volverAlCatalogo();
+        }
+    });
+
+    // 🟢 MAGIA AQUÍ: Plantamos la bandera de inicio cuando entra a la web por primera vez
+    history.replaceState({ vista: 'inicio' }, "", window.location.pathname);
 
     window.addEventListener('DOMContentLoaded', (event) => {
         const urlParams = new URLSearchParams(window.location.search);
