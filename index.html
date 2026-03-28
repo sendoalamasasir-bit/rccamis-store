@@ -6,7 +6,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>RC Camis | Tienda Oficial de Camisetas de Fútbol</title>
     
-    <script src="https://www.paypal.com/sdk/js?client-id=ATSuNNs-DFQafpB0uGNHs0gBE9aSftDm96ZL7QYHYDB5YpNviJMhqCSTfKsLq2wUXlqdzleQKRscY6XO&currency=EUR"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=EUR"></script>
 
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
@@ -531,7 +531,7 @@
             const now = Date.now();
             
             // ⚠️ CAMBIADO A 0 PARA QUE NO GUARDE CACHÉ MIENTRAS PRUEBAS
-            const horasValidez = 24 * 60 * 60 * 1000; 
+            const horasValidez = 0; 
 
             if (cachedData && cacheTime && (now - cacheTime < horasValidez)) {
                 allLongSleeveProducts = JSON.parse(cachedData);
@@ -665,9 +665,18 @@
         if(term === "") {
             renderizarVistaActual();
         } else {
-            const filtrados = allProducts.filter(p => 
-                p.name.toLowerCase().includes(term) || (p.team && p.team.toLowerCase().includes(term))
-            );
+            // Cortamos lo que escribe el cliente en palabras sueltas
+            const palabras = term.split(' ').filter(word => word.length > 0);
+            
+            const filtrados = allProducts.filter(p => {
+                const nombreOriginal = p.name.toLowerCase();
+                const equipo = p.team ? p.team.toLowerCase() : "";
+                
+                // Exigimos que TODAS las palabras que ha escrito estén en el título (en cualquier orden)
+                return palabras.every(palabra => 
+                    nombreOriginal.includes(palabra) || equipo.includes(palabra)
+                );
+            });
             renderGrid(filtrados);
             btnContainer.classList.add('hidden'); 
         }
@@ -693,6 +702,18 @@
         document.getElementById('product-count').innerText = allProducts.length;
     }
 
+    function limpiarTituloFeo(tituloBruto) {
+        return tituloBruto
+            // Quitamos palabras innecesarias que ensucian
+            .replace(/Camiseta (del |de )?/ig, '') 
+            .replace(/version fan|fan version|version aficionado/ig, '') 
+            .replace(/version jugador|player version/ig, '') 
+            .replace(/version /ig, '') // Quita la palabra "version " suelta
+            // Limpiamos espacios dobles que puedan quedar
+            .replace(/\s+/g, ' ')
+            .trim();
+    }
+
     function renderGrid(productsList) {
         const grid = document.getElementById('products-grid');
         grid.innerHTML = '';
@@ -715,7 +736,7 @@
                     </div>
                 </div>
                 <div class="p-3">
-                    <h3 class="font-bold text-slate-900 dark:text-white text-sm leading-tight h-10 line-clamp-2">${p.name}</h3>
+                    <h3 class="font-bold text-slate-900 dark:text-white text-sm leading-tight h-10 line-clamp-2">${limpiarTituloFeo(p.name)}</h3>
                 </div>
             `;
             grid.appendChild(card);
@@ -738,7 +759,7 @@
         document.querySelectorAll('.version-btn')[0].classList.add('active');
 
         document.getElementById('detail-image').src = currentProduct.image;
-        document.getElementById('detail-title').innerText = currentProduct.name;
+        document.getElementById('detail-title').innerText = limpiarTituloFeo(currentProduct.name);
         
         updatePriceDisplay();
 
