@@ -511,7 +511,7 @@
 
     let allProducts = []; 
     let allLongSleeveProducts = []; 
-    window.filteredDisplayProducts = []; // 🟢 NUEVO: Aquí guardaremos solo los productos "base" limpios
+    window.filteredDisplayProducts = []; 
     
     let currentLimitCount = 20; 
     let currentCollectionID = 'laliga'; 
@@ -535,6 +535,19 @@
         { id: 'long_sleeve', label: '🧥 M. LARGA' }
     ];
 
+    // 🔴🔴 ESTA ES LA FUNCIÓN NUEVA DE LIMPIEZA TOTAL 🔴🔴
+    function obtenerNombreBaseLimpio(nombre) {
+        if (!nombre) return "";
+        return nombre.toLowerCase()
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Quita tildes
+            // Borra cualquier palabra clave (incluida la palabra "version" suelta)
+            .replace(/\b(version|fan|aficionado|jugador|player|manga|larga|corta|long|short|sleeve)\b/ig, '')
+            .replace(/[^a-z0-9]/ig, ' ') // Quita barras, guiones, etc.
+            .replace(/\s+/g, ' ') // Quita espacios dobles
+            .trim();
+    }
+
+    // Usamos esto para que el título se vea bonito (sin estropear la búsqueda interna)
     function limpiarTituloFeo(tituloBruto) {
         if (!tituloBruto) return "";
         return tituloBruto
@@ -669,14 +682,11 @@
         }
     }
 
-    // 🟢 NUEVO: Oculta versiones jugador/larga del catálogo principal
     window.aplicarOrdenYRenderizar = function() {
         let baseProducts = allProducts.filter(p => {
             let n = p.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
             let isJugador = n.includes('jugador') || n.includes('player');
             let isLarga = n.includes('manga larga') || n.includes('long sleeve');
-            
-            // Solo mostramos si NO es jugador y NO es manga larga
             return !isJugador && !isLarga;
         });
 
@@ -705,7 +715,6 @@
         renderizarVistaActual();
     }
 
-    // 🟢 NUEVO: Busca solo sobre las camisetas base limpias
     document.getElementById('search-input').addEventListener('input', (e) => {
         const term = e.target.value.toLowerCase().trim();
         const btnContainer = document.getElementById('btn-container');
@@ -775,7 +784,6 @@
     }
 
     window.openProduct = function(productId, vieneDelBotonAtras = false) {
-        // Buscamos siempre en TODAS por si viene de un enlace directo
         currentProduct = allProducts.find(p => p.id === productId);
         if(!currentProduct) return;
 
@@ -804,7 +812,7 @@
         }
     }
 
-    // 🟢 NUEVO: Magia para cambiar la foto si existe la variante
+    // 🔴🔴 ESTA ES LA FUNCIÓN NUEVA QUE CAMBIA LA FOTO 🔴🔴
     window.selectOption = function(type, value, price, btn) {
         if (type === 'version' || type === 'manga') {
             let tempVersion = (type === 'version') ? value : currentSelection.version;
@@ -813,43 +821,48 @@
             let isJugador = (tempVersion === 'Jugador');
             let isMangaLarga = (tempManga === 'Larga');
             
-            let baseName = currentProduct.name.toLowerCase()
-                .normalize("NFD").replace(/[\u0300-\u036f]/g, "") 
-                .replace(/\b(version fan|fan version|version aficionado|aficionado|version jugador|player version|retro|version para ninos|kids|manga larga|long sleeve)\b/g, '')
-                .replace(/\b(20\d{2}|\d{2}\/\d{2}|\d{2}-\d{2})\b/g, '')
-                .replace(/\s+/g, ' ')
-                .trim();
+            // Si volvemos a la opción base (Aficionado + Corta)
+            if (!isJugador && !isMangaLarga) {
+                document.getElementById('detail-image').src = currentProduct.image;
+            } 
+            // Si buscamos otra versión
+            else {
+                let baseNameClean = obtenerNombreBaseLimpio(currentProduct.name);
+                let isAvailable = false;
+                let matchedProduct = null;
+                let catalogo = [...allProducts, ...allLongSleeveProducts];
+                
+                for (let p of catalogo) {
+                    let pNameClean = obtenerNombreBaseLimpio(p.name);
+                    
+                    // REGLA 1: La raíz del nombre tiene que ser idéntica
+                    if (baseNameClean !== pNameClean) continue;
+                    
+                    let pNameRaw = p.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    let hasJugador = pNameRaw.includes('jugador') || pNameRaw.includes('player');
+                    let hasLarga = pNameRaw.includes('manga larga') || pNameRaw.includes('long sleeve');
+                    
+                    // REGLA 2: Tiene que ser exactamente la combinación que ha pulsado
+                    if (isJugador !== hasJugador) continue;
+                    if (isMangaLarga !== hasLarga) continue;
+                    
+                    isAvailable = true;
+                    matchedProduct = p; 
+                    break;
+                }
 
-            let isAvailable = false;
-            let matchedProduct = null;
-            let catalogo = [...allProducts, ...allLongSleeveProducts];
-            
-            for (let p of catalogo) {
-                let pName = p.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-                if (!pName.includes(baseName)) continue;
-                
-                let hasJugador = pName.includes('jugador') || pName.includes('player');
-                let hasLarga = pName.includes('manga larga') || pName.includes('long sleeve');
-                
-                if (isJugador !== hasJugador) continue;
-                if (isMangaLarga !== hasLarga) continue;
-                
-                isAvailable = true;
-                matchedProduct = p; // Aquí guardamos el producto oculto que acabamos de encontrar
-                break;
-            }
-
-            if (!isAvailable) {
-                let msg = "❌ Esta camiseta no está disponible en ";
-                if(isJugador && isMangaLarga) msg += "Versión Jugador + Manga Larga.";
-                else if(isJugador) msg += "Versión Jugador.";
-                else if(isMangaLarga) msg += "Manga Larga.";
-                else msg += "esta combinación.";
-                
-                return showToast(msg, true);
-            } else {
-                // MAGIA VISUAL: Cambiamos la foto a la de la versión exacta
-                document.getElementById('detail-image').src = matchedProduct.image;
+                if (!isAvailable) {
+                    let msg = "❌ Esta camiseta no está disponible en ";
+                    if(isJugador && isMangaLarga) msg += "Versión Jugador + Manga Larga.";
+                    else if(isJugador) msg += "Versión Jugador.";
+                    else if(isMangaLarga) msg += "Manga Larga.";
+                    else msg += "esta combinación.";
+                    
+                    return showToast(msg, true); // Bloqueamos si no existe
+                } else {
+                    // Si existe, actualizamos la foto con una precisión del 100%
+                    document.getElementById('detail-image').src = matchedProduct.image;
+                }
             }
         }
 
@@ -895,7 +908,6 @@
         document.getElementById('detail-old-price').innerText = oldPrice + "€";
     }
 
-    // 🟢 NUEVO: Guardar en el carrito la foto que el cliente está viendo
     window.addToCartCurrentProduct = function() {
         if(!currentSelection.size) {
             document.getElementById('error-msg').classList.remove('hidden');
@@ -909,7 +921,7 @@
 
         const cartItem = {
             ...currentProduct,
-            image: document.getElementById('detail-image').src, // Cogemos la foto dinámica actual
+            image: document.getElementById('detail-image').src, 
             finalPrice: finalPrice,
             selection: { ...currentSelection, customName, customNumber, patch: document.getElementById('patch-select').value }
         };
