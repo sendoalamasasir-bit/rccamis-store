@@ -511,6 +511,8 @@
 
     let allProducts = []; 
     let allLongSleeveProducts = []; 
+    window.filteredDisplayProducts = []; // 🟢 NUEVO: Aquí guardaremos solo los productos "base" limpios
+    
     let currentLimitCount = 20; 
     let currentCollectionID = 'laliga'; 
     let currentProduct = null;
@@ -667,22 +669,34 @@
         }
     }
 
+    // 🟢 NUEVO: Oculta versiones jugador/larga del catálogo principal
     window.aplicarOrdenYRenderizar = function() {
-        const sortValue = document.getElementById('sort-select').value;
-        if (sortValue === 'price_asc') allProducts.sort((a, b) => a.price - b.price);
-        else if (sortValue === 'price_desc') allProducts.sort((a, b) => b.price - a.price);
-        else allProducts.sort((a, b) => 0.5 - Math.random()); 
+        let baseProducts = allProducts.filter(p => {
+            let n = p.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            let isJugador = n.includes('jugador') || n.includes('player');
+            let isLarga = n.includes('manga larga') || n.includes('long sleeve');
+            
+            // Solo mostramos si NO es jugador y NO es manga larga
+            return !isJugador && !isLarga;
+        });
 
+        const sortValue = document.getElementById('sort-select').value;
+        if (sortValue === 'price_asc') baseProducts.sort((a, b) => a.price - b.price);
+        else if (sortValue === 'price_desc') baseProducts.sort((a, b) => b.price - a.price);
+        else baseProducts.sort((a, b) => 0.5 - Math.random()); 
+
+        window.filteredDisplayProducts = baseProducts;
+        document.getElementById('product-count').innerText = baseProducts.length; 
         document.getElementById('loader-initial').classList.add('hidden');
         renderizarVistaActual();
     }
 
     window.renderizarVistaActual = function() {
-        const productosAVisualizar = allProducts.slice(0, currentLimitCount);
+        const productosAVisualizar = window.filteredDisplayProducts.slice(0, currentLimitCount);
         renderGrid(productosAVisualizar);
 
         const btnContainer = document.getElementById('btn-container');
-        if (currentLimitCount >= allProducts.length) btnContainer.classList.add('hidden');
+        if (currentLimitCount >= window.filteredDisplayProducts.length) btnContainer.classList.add('hidden');
         else btnContainer.classList.remove('hidden');
     }
 
@@ -691,6 +705,7 @@
         renderizarVistaActual();
     }
 
+    // 🟢 NUEVO: Busca solo sobre las camisetas base limpias
     document.getElementById('search-input').addEventListener('input', (e) => {
         const term = e.target.value.toLowerCase().trim();
         const btnContainer = document.getElementById('btn-container');
@@ -699,7 +714,7 @@
             renderizarVistaActual();
         } else {
             const palabras = term.split(' ').filter(word => word.length > 0);
-            const filtrados = allProducts.filter(p => {
+            const filtrados = window.filteredDisplayProducts.filter(p => {
                 const nombreOriginal = p.name.toLowerCase();
                 const equipo = p.team ? p.team.toLowerCase() : "";
                 return palabras.every(palabra => 
@@ -728,7 +743,6 @@
             menu.appendChild(btn);
         });
         document.getElementById('section-title').innerHTML = categories.find(c => c.id === currentCollectionID)?.label || "Catálogo";
-        document.getElementById('product-count').innerText = allProducts.length;
     }
 
     function renderGrid(productsList) {
@@ -761,6 +775,7 @@
     }
 
     window.openProduct = function(productId, vieneDelBotonAtras = false) {
+        // Buscamos siempre en TODAS por si viene de un enlace directo
         currentProduct = allProducts.find(p => p.id === productId);
         if(!currentProduct) return;
 
@@ -789,6 +804,7 @@
         }
     }
 
+    // 🟢 NUEVO: Magia para cambiar la foto si existe la variante
     window.selectOption = function(type, value, price, btn) {
         if (type === 'version' || type === 'manga') {
             let tempVersion = (type === 'version') ? value : currentSelection.version;
@@ -805,6 +821,7 @@
                 .trim();
 
             let isAvailable = false;
+            let matchedProduct = null;
             let catalogo = [...allProducts, ...allLongSleeveProducts];
             
             for (let p of catalogo) {
@@ -818,6 +835,7 @@
                 if (isMangaLarga !== hasLarga) continue;
                 
                 isAvailable = true;
+                matchedProduct = p; // Aquí guardamos el producto oculto que acabamos de encontrar
                 break;
             }
 
@@ -829,6 +847,9 @@
                 else msg += "esta combinación.";
                 
                 return showToast(msg, true);
+            } else {
+                // MAGIA VISUAL: Cambiamos la foto a la de la versión exacta
+                document.getElementById('detail-image').src = matchedProduct.image;
             }
         }
 
@@ -874,6 +895,7 @@
         document.getElementById('detail-old-price').innerText = oldPrice + "€";
     }
 
+    // 🟢 NUEVO: Guardar en el carrito la foto que el cliente está viendo
     window.addToCartCurrentProduct = function() {
         if(!currentSelection.size) {
             document.getElementById('error-msg').classList.remove('hidden');
@@ -887,6 +909,7 @@
 
         const cartItem = {
             ...currentProduct,
+            image: document.getElementById('detail-image').src, // Cogemos la foto dinámica actual
             finalPrice: finalPrice,
             selection: { ...currentSelection, customName, customNumber, patch: document.getElementById('patch-select').value }
         };
