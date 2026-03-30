@@ -533,7 +533,6 @@
         { id: 'long_sleeve', label: '🧥 M. LARGA' }
     ];
 
-    // 🟢 NUEVA FUNCIÓN: Limpia los títulos largos y feos para que se vean bonitos
     function limpiarTituloFeo(tituloBruto) {
         if (!tituloBruto) return "";
         return tituloBruto
@@ -553,7 +552,6 @@
             const cacheTime = localStorage.getItem(timeKey);
             const now = Date.now();
             
-            // ⚠️ 0 mientras pruebas, 24 * 60 * 60 * 1000 en Producción
             const horasValidez = 0; 
 
             if (cachedData && cacheTime && (now - cacheTime < horasValidez)) {
@@ -630,7 +628,6 @@
         const cacheTime = localStorage.getItem(timeKey);
         const now = Date.now();
         
-        // ⚠️ 0 mientras pruebas, 24 * 60 * 60 * 1000 en Producción
         const horasValidez = 0; 
 
         if (cachedData && cacheTime && (now - cacheTime < horasValidez)) {
@@ -644,8 +641,17 @@
                 allProducts = [];
                 snap.forEach(doc => {
                     const data = doc.data();
-                    const price = parseFloat(data.price) || 20;
-                    const oldPrice = (collectionId === 'retro') ? 100 : 80;
+                    
+                    const nombre = data.name ? data.name.toLowerCase() : '';
+                    const esRetro = collectionId === 'retro' || nombre.includes('retro');
+                    
+                    let price = parseFloat(data.price) || 25;
+                    if (esRetro) {
+                        price = 30;
+                    }
+
+                    const oldPrice = esRetro ? 100 : 80;
+                    
                     allProducts.push({ ...data, id: doc.id, price: price, oldPrice: oldPrice });
                 });
 
@@ -685,7 +691,6 @@
         renderizarVistaActual();
     }
 
-    // 🟢 NUEVO BUSCADOR INTELIGENTE: Busca por palabras sueltas
     document.getElementById('search-input').addEventListener('input', (e) => {
         const term = e.target.value.toLowerCase().trim();
         const btnContainer = document.getElementById('btn-container');
@@ -755,7 +760,6 @@
         });
     }
 
-    // 🟢 NUEVA FUNCIÓN OPENPRODUCT: Con gestión del historial
     window.openProduct = function(productId, vieneDelBotonAtras = false) {
         currentProduct = allProducts.find(p => p.id === productId);
         if(!currentProduct) return;
@@ -786,7 +790,6 @@
     }
 
     window.selectOption = function(type, value, price, btn) {
-        // 🟢 NUEVO CÓDIGO INTELIGENTE: Busca combinaciones sin depender de palabras exactas
         if (type === 'version' || type === 'manga') {
             let tempVersion = (type === 'version') ? value : currentSelection.version;
             let tempManga = (type === 'manga') ? value : currentSelection.manga;
@@ -860,8 +863,10 @@
         const total = currentSelection.basePrice + currentSelection.mangaPrice + currentSelection.versionPrice + currentSelection.patchPrice + customPrice;
         document.getElementById('detail-price').innerText = total + "€";
 
+        const esRetro = currentCollectionID === 'retro' || (currentProduct && currentProduct.name && currentProduct.name.toLowerCase().includes('retro'));
+
         let oldPrice = 80; 
-        if (currentCollectionID === 'retro') {
+        if (esRetro) {
             oldPrice = 100;
         } else if (currentSelection.version === 'Jugador') {
             oldPrice = 90;
@@ -982,7 +987,6 @@
         window.updateCartUI();
     }
 
-    // 🟢 ACTUALIZADA: Ahora guarda los datos de envío
     window.guardarPedidoEnDashboard = async function(cart, total, metodo, transactionId = "N/A", shippingInfo = null) {
         try {
             await addDoc(collection(db, "orders"), {
@@ -991,7 +995,7 @@
                 metodoPago: metodo,
                 estado: metodo === 'PayPal' ? 'Pagado' : 'Pendiente (Instagram)',
                 transactionId: transactionId,
-                shipping: shippingInfo, // Guardamos la dirección
+                shipping: shippingInfo, 
                 fecha: serverTimestamp()
             });
         } catch (e) { console.error("Error guardando estadisticas: ", e); }
@@ -1026,7 +1030,6 @@
         const cart = JSON.parse(localStorage.getItem('rccamis_cart')) || [];
         if (cart.length === 0) return showToast("El carrito está vacío", true);
         
-        // 🟢 NUEVO: Comprobar formulario antes de enviar por IG
         const name = document.getElementById('ship-name').value;
         const address = document.getElementById('ship-address').value;
         const city = document.getElementById('ship-city').value;
@@ -1058,7 +1061,6 @@
 
     window.updateCartUI();
 
-    // 🟢 NUEVO: Vigilantes del historial para el botón "Atrás"
     window.addEventListener('popstate', function(event) {
         if (event.state && event.state.vista === 'producto') {
             window.openProduct(event.state.id, true);
@@ -1105,7 +1107,6 @@
             shape:  'rect',
             label:  'pay'
         },
-        // 🟢 NUEVO: Bloquea PayPal si no hay datos
         onClick: function(data, actions) {
             const name = document.getElementById('ship-name').value;
             const address = document.getElementById('ship-address').value;
@@ -1140,7 +1141,6 @@
                 const transaction = orderData.purchase_units[0].payments.captures[0];
                 const cart = JSON.parse(localStorage.getItem('rccamis_cart')) || [];
                 
-                // 🟢 NUEVO: Capturar datos de envío para Firebase y portapapeles
                 const shippingInfo = {
                     name: document.getElementById('ship-name').value,
                     address: document.getElementById('ship-address').value,
