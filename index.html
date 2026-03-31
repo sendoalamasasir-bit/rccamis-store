@@ -53,27 +53,31 @@
             </div>
 
             <nav class="hidden md:flex items-center space-x-8">
-                <a href="#" onclick="showHome()" class="font-semibold text-slate-600 hover:text-primary dark:text-slate-300 dark:hover:text-primary transition-colors">Inicio</a>
+                <button type="button" onclick="showHome()" class="font-semibold text-slate-600 hover:text-primary dark:text-slate-300 dark:hover:text-primary transition-colors">Inicio</button>
                 
                 <div class="relative group">
-                    <button onclick="showCatalog('laliga')" class="font-semibold text-slate-600 hover:text-primary dark:text-slate-300 dark:hover:text-primary transition-colors flex items-center gap-1 pb-4 pt-4">
+                    <button type="button" onclick="showCatalog('laliga')" class="font-semibold text-slate-600 hover:text-primary dark:text-slate-300 dark:hover:text-primary transition-colors flex items-center gap-1 pb-4 pt-4">
                         Catálogo <span class="material-icons text-sm">expand_more</span>
                     </button>
                     <div class="absolute left-0 top-full mt-0 w-48 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl hidden group-hover:block overflow-hidden z-50">
-                        <a href="#" onclick="showCatalog('laliga')" class="block px-4 py-3 text-sm hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-700">🇪🇸 LaLiga</a>
-                        <a href="#" onclick="showCatalog('premier')" class="block px-4 py-3 text-sm hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-700">🇬🇧 Premier League</a>
-                        <a href="#" onclick="showCatalog('retro')" class="block px-4 py-3 text-sm hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-700 font-bold text-primary">🕰️ Joyas Retro</a>
-                        <a href="#" onclick="showCatalog('national_teams')" class="block px-4 py-3 text-sm hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-700">🌍 Selecciones</a>
-                        <a href="#" onclick="showCatalog('long_sleeve')" class="block px-4 py-3 text-sm hover:bg-slate-50 dark:hover:bg-slate-700">🧥 Manga Larga</a>
+                        <button type="button" onclick="showCatalog('laliga')" class="w-full text-left block px-4 py-3 text-sm hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-700">🇪🇸 LaLiga</button>
+                        <button type="button" onclick="showCatalog('premier')" class="w-full text-left block px-4 py-3 text-sm hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-700">🇬🇧 Premier League</button>
+                        <button type="button" onclick="showCatalog('retro')" class="w-full text-left block px-4 py-3 text-sm hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-700 font-bold text-primary">🕰️ Joyas Retro</button>
+                        <button type="button" onclick="showCatalog('national_teams')" class="w-full text-left block px-4 py-3 text-sm hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-700">🌍 Selecciones</button>
+                        <button type="button" onclick="showCatalog('long_sleeve')" class="w-full text-left block px-4 py-3 text-sm hover:bg-slate-50 dark:hover:bg-slate-700">🧥 Manga Larga</button>
                     </div>
                 </div>
 
-                <button onclick="toggleSizeGuide()" class="font-semibold text-slate-600 hover:text-primary dark:text-slate-300 dark:hover:text-primary flex items-center gap-1 transition-colors">
+                <button type="button" onclick="toggleSizeGuide()" class="font-semibold text-slate-600 hover:text-primary dark:text-slate-300 dark:hover:text-primary flex items-center gap-1 transition-colors">
                     <span class="material-icons text-sm">straighten</span> Guía de Tallas
                 </button>
             </nav>
 
             <div class="flex items-center space-x-2">
+                <div class="hidden sm:flex items-center bg-slate-100 dark:bg-slate-800 rounded-full px-3 py-1 mr-2 border border-slate-200 dark:border-slate-700">
+                    <span class="material-icons text-slate-400 text-sm">search</span>
+                    <input id="global-search" type="text" placeholder="Buscar camiseta..." class="bg-transparent border-none text-sm focus:ring-0 outline-none w-32 md:w-48 text-slate-700 dark:text-slate-200 placeholder-slate-400">
+                </div>
                 <button class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" onclick="document.documentElement.classList.toggle('dark')">
                     <span class="material-icons text-slate-600 dark:text-slate-300">dark_mode</span>
                 </button>
@@ -497,6 +501,83 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getFirestore, collection, getDocs, limit, query, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+// Lista de todas las colecciones que existen en tu base de datos
+const todasLasColecciones = [
+    'laliga', 'premier', 'retro', 'national_teams', 'seriea', 
+    'bundesliga', 'ligue1', 'long_sleeve', 'brasileiro', 
+    'argentina', 'mls', 'ligamx'
+];
+
+window.buscarEnTodoElCatalogo = async function(query) {
+    const queryMin = query.toLowerCase();
+    let resultadosGlobales = [];
+
+    // 1. Preparamos la interfaz (Ocultar inicio, mostrar catálogo)
+    document.getElementById('home-view').classList.add('hidden');
+    document.getElementById('catalog-view').classList.remove('hidden');
+    
+    // Cambiamos el título para que el usuario sepa qué está viendo
+    const tituloCatalogo = document.getElementById('category-title');
+    if (tituloCatalogo) {
+        tituloCatalogo.innerHTML = `Resultados para: "<span class="text-primary">${query}</span>"`;
+    }
+
+    // Ponemos un loader en la cuadrícula de productos
+    const grid = document.getElementById('products-grid'); // ⚠️ Asegúrate de que este es el ID de tu cuadrícula
+    if (grid) {
+        grid.innerHTML = `
+            <div class="col-span-full text-center py-20">
+                <span class="material-icons animate-spin text-5xl text-primary">refresh</span>
+                <p class="mt-4 text-slate-500 font-semibold">Buscando en todas las ligas...</p>
+            </div>
+        `;
+    }
+
+    // Hacemos scroll hacia los resultados
+    document.getElementById('catalog-view').scrollIntoView({ behavior: 'smooth' });
+
+    try {
+        // 2. MAGIA: Buscamos en todas las colecciones a la vez
+        for (const coleccionName of todasLasColecciones) {
+            const snapshot = await getDocs(collection(db, coleccionName));
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                // Si el nombre de la camiseta incluye lo que el usuario ha buscado
+                if (data.name && data.name.toLowerCase().includes(queryMin)) {
+                    resultadosGlobales.push({ 
+                        id: doc.id, 
+                        ...data, 
+                        coleccionOrigen: coleccionName // Guardamos de qué liga viene por si hace falta
+                    });
+                }
+            });
+        }
+
+        // 3. Renderizamos los resultados
+        if (resultadosGlobales.length === 0) {
+            grid.innerHTML = `
+                <div class="col-span-full text-center py-20">
+                    <span class="material-icons text-6xl text-slate-300">search_off</span>
+                    <h3 class="text-xl font-bold text-slate-700 mt-4">No se encontraron resultados</h3>
+                    <p class="text-slate-500 mt-2">No tenemos ninguna camiseta que coincida con "${query}".</p>
+                </div>
+            `;
+            return;
+        }
+
+        // ⚠️ ATENCIÓN AQUÍ ⚠️
+        // Necesitas pasar 'resultadosGlobales' a la función que dibuja las tarjetas de producto.
+        // Sustituye 'renderizarProductos' por el nombre real de tu función (ej: renderProducts, drawGrid, etc.)
+        // O si no tienes una función separada, tendrás que copiar aquí el bucle que crea el HTML de las tarjetas.
+        
+        renderizarProductos(resultadosGlobales); 
+
+    } catch (error) {
+        console.error("Error en la búsqueda global:", error);
+        grid.innerHTML = '<p class="col-span-full text-center py-10 text-red-500 font-bold">Ocurrió un error al buscar. Por favor, inténtalo de nuevo.</p>';
+    }
+};
+
     const firebaseConfig = {
         apiKey: "AIzaSyDCxD-IVLjXcQT1LzfLVqy7nPpTZvwEqNnw",
         authDomain: "rccamis-store.firebaseapp.com",
@@ -509,6 +590,92 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+// ==========================================
+        // MOTOR DE BÚSQUEDA GLOBAL (TODAS LAS LIGAS)
+        // ==========================================
+        window.buscarEnTodoElCatalogo = async function(query) {
+            const todasLasColecciones = [
+                'laliga', 'premier', 'retro', 'national_teams', 'seriea', 
+                'bundesliga', 'ligue1', 'long_sleeve', 'brasileiro', 
+                'argentina', 'mls', 'ligamx'
+            ];
+            
+            const queryMin = query.toLowerCase();
+            let resultadosGlobales = [];
+
+            // 1. Preparar la vista
+            const homeView = document.getElementById('home-view');
+            const catalogView = document.getElementById('catalog-view');
+            const productDetailView = document.getElementById('product-detail-view');
+            
+            if(homeView) homeView.classList.add('hidden');
+            if(productDetailView) productDetailView.classList.add('hidden');
+            if(catalogView) catalogView.classList.remove('hidden');
+            
+            // 2. Título y Cargando
+            const sectionTitle = document.getElementById('section-title');
+            const grid = document.getElementById('products-grid');
+            
+            if(sectionTitle) sectionTitle.innerHTML = `Resultados para: "<span class="text-primary">${query}</span>"`;
+            if(grid) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-20">
+                        <span class="material-icons animate-spin text-5xl text-primary">refresh</span>
+                        <p class="mt-4 text-slate-500 font-semibold">Buscando en todas las ligas...</p>
+                    </div>
+                `;
+            }
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            try {
+                // 3. Consultar todas las colecciones
+                for (const colName of todasLasColecciones) {
+                    const querySnapshot = await getDocs(collection(db, colName));
+                    querySnapshot.forEach((doc) => {
+                        const data = doc.data();
+                        if (data.name && data.name.toLowerCase().includes(queryMin)) {
+                            resultadosGlobales.push({ id: doc.id, ...data });
+                        }
+                    });
+                }
+
+                // 4. Mostrar resultados o mensaje de vacío
+                if (resultadosGlobales.length === 0) {
+                    grid.innerHTML = `<div class="col-span-full text-center py-20 text-slate-500">No se encontraron camisetas con ese nombre.</div>`;
+                    return;
+                }
+
+                let html = '';
+                resultadosGlobales.forEach(prod => {
+                    const precio = prod.price || 30;
+                    const imagen = prod.image || '';
+                    const nombreLimpio = prod.name.replace(/'/g, "\\'");
+
+                    html += `
+                    <div onclick="showProductDetail('${prod.id}', '${nombreLimpio}', ${precio}, '${imagen}')" 
+                         class="group bg-white dark:bg-slate-800 rounded-2xl p-4 border border-slate-100 dark:border-slate-700 shadow-sm cursor-pointer hover:shadow-xl transition-all flex flex-col">
+                        <div class="aspect-square rounded-xl overflow-hidden mb-3 bg-slate-50 dark:bg-slate-900 flex items-center justify-center">
+                            <img src="${imagen}" class="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-500">
+                        </div>
+                        <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm line-clamp-2 mb-2 flex-1">${prod.name}</h3>
+                        <div class="flex items-end gap-2">
+                            <span class="text-xl font-black text-slate-900 dark:text-white">${precio}€</span>
+                        </div>
+                    </div>`;
+                });
+                
+                grid.innerHTML = html;
+                
+                // Ocultar botón de "Cargar más" si existe
+                const btnContainer = document.getElementById('btn-container');
+                if(btnContainer) btnContainer.classList.add('hidden');
+
+            } catch (error) {
+                console.error("Error en búsqueda:", error);
+                grid.innerHTML = `<div class="col-span-full text-center text-red-500">Error al conectar con la base de datos.</div>`;
+            }
+        };
     let allProducts = []; 
     let allLongSleeveProducts = []; 
     window.filteredDisplayProducts = []; 
@@ -1216,6 +1383,48 @@
             window.showToast("Hubo un error al procesar el pago", true);
         }
     }).render('#paypal-button-container');
+</script>
+<script>
+// --- BUSCADOR GLOBAL MULTI-COLECCIÓN ---
+document.addEventListener("DOMContentLoaded", function() {
+    const globalSearchInput = document.getElementById('global-search');
+    
+    if(globalSearchInput) {
+        globalSearchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const query = this.value.trim();
+                if(query !== "") {
+                    // Limpiamos la barra de búsqueda superior
+                    globalSearchInput.value = '';
+                    
+                    // Llamamos a la función que buscará en todo Firebase
+                    // Asegúrate de que el script de abajo esté cargado
+                    if(typeof window.buscarEnTodoElCatalogo === 'function') {
+                        window.buscarEnTodoElCatalogo(query);
+                    } else {
+                        console.error("La función buscarEnTodoElCatalogo no está definida.");
+                    }
+                }
+            }
+        });
+    }
+});
+</script>
+<script>
+// Evitamos que JavaScript se congele al intentar pintar un botón que no existe
+window.addEventListener('error', function(e) {
+    if (e.message && e.message.includes("classList") && e.message.includes("null")) {
+        console.warn("Se intentó colorear un botón de categoría inexistente. El catálogo cargará sin problemas.");
+        e.preventDefault();
+    }
+}, true);
+
+// Bloqueamos saltos de enlaces antiguos por si se te olvidó alguno
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('a[href="#"]').forEach(enlace => {
+        enlace.addEventListener('click', function(e) { e.preventDefault(); });
+    });
+});
 </script>
 </body>
 </html>
