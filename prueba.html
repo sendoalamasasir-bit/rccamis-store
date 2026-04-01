@@ -2,108 +2,139 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>⚽ Renombrador de Equipos - Rccamis</title>
+    <title>🏆 Procesador Total - Rccamis Store</title>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore-compat.js"></script>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 40px; display: flex; justify-content: center; }
-        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); width: 100%; max-width: 550px; }
-        h2 { color: #1a1a1a; text-align: center; margin-bottom: 10px; }
-        p { color: #666; font-size: 14px; text-align: center; margin-bottom: 25px; }
-        select, button { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; font-size: 16px; }
-        button { background: #e67e22; color: white; border: none; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        button:hover { background: #d35400; }
-        #console { background: #2c3e50; color: #ecf0f1; padding: 15px; border-radius: 8px; height: 200px; overflow-y: auto; font-family: monospace; font-size: 12px; margin-top: 20px; }
-        .match { color: #f1c40f; }
+        :root { --accent: #2980b9; --bg: #f8f9fa; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); padding: 20px; display: flex; justify-content: center; }
+        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 600px; }
+        h2 { text-align: center; color: #2c3e50; margin-bottom: 5px; }
+        .badge { background: #e74c3c; color: white; padding: 3px 8px; border-radius: 4px; font-size: 11px; display: inline-block; margin-bottom: 20px; }
+        select, button { width: 100%; padding: 14px; margin: 10px 0; border-radius: 8px; font-size: 16px; border: 1px solid #ddd; }
+        button { background: var(--accent); color: white; border: none; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        button:hover { background: #1f6391; transform: translateY(-1px); }
+        #console { background: #1e272e; color: #44bd32; padding: 15px; border-radius: 8px; height: 300px; overflow-y: auto; font-family: 'Consolas', monospace; font-size: 12px; margin-top: 15px; border: 4px solid #2f3640; }
+        .change-log { color: #fbc531; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h2>⚽ Renombrador de Equipos</h2>
-    <p>Cambia "U" por "Manchester United", "MC" por "Manchester City", etc.</p>
+    <h2>🏆 Procesador de Títulos</h2>
+    <center><span class="badge">V3.0 - MULTILIGA & MANGA LARGA</span></center>
 
-    <label>Selecciona Colección:</label>
+    <label>1. Selecciona la liga a procesar:</label>
     <select id="coleccion">
-        <option value="premier">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</option>
         <option value="laliga">🇪🇸 La Liga</option>
+        <option value="premier">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</option>
         <option value="seriea">🇮🇹 Serie A</option>
+        <option value="bundesliga">🇩🇪 Bundesliga</option>
+        <option value="ligue1">🇫🇷 Ligue 1</option>
+        <option value="eredivisie">🇳🇱 Eredivisie</option>
+        <option value="primeira">🇵🇹 Primeira Liga</option>
         <option value="national_teams">🌍 Selecciones</option>
+        <option value="retro">⏳ Retro Classic</option>
+        <option value="kids">👶 Kids / Niños</option>
+        <option value="tracksuits">🧥 Chándals</option>
+        <option value="worldwire">🌐 Otros Equipos</option>
     </select>
 
-    <button onclick="procesarNombres()">🔄 APLICAR CAMBIOS DE NOMBRE</button>
+    <button onclick="iniciarProceso()">🔄 TRADUCIR Y LIMPIAR AHORA</button>
 
-    <div id="console">> Listo para renombrar...</div>
+    <div id="console">> Sistema listo. Selecciona una liga y dale a Procesar...</div>
 </div>
 
 <script>
-    // 1. CONFIGURA TUS CREDENCIALES
+    // --- PEGA TUS CREDENCIALES AQUÍ ---
     const firebaseConfig = {
         apiKey: "TU_API_KEY",
         authDomain: "rccamis-store.firebaseapp.com",
         projectId: "rccamis-store",
         storageBucket: "rccamis-store.appspot.com",
-        messagingSenderId: "TU_ID",
+        messagingSenderId: "TU_SENDER_ID",
         appId: "TU_APP_ID"
     };
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-    const consoleDiv = document.getElementById('console');
 
-    function log(msg) {
-        consoleDiv.innerHTML += `<div>> ${msg}</div>`;
-        consoleDiv.scrollTop = consoleDiv.scrollHeight;
-    }
-
-    // --- DICCIONARIO DE TRADUCCIÓN ---
-    const reemplazos = {
+    // --- DICCIONARIO MAESTRO DE TRADUCCIÓN ---
+    const diccionario = {
+        // Equipos
         " U ": " Manchester United ",
         "U ": "Manchester United ",
         " MC ": " Manchester City ",
         "Real ": "Real Madrid ",
         "Atleti ": "Atlético de Madrid ",
         "Barca": "FC Barcelona",
-        "PSG": "Paris Saint-Germain"
+        
+        // Atributos (Manga Larga / Retro)
+        " LS": " Manga Larga",
+        "LS ": "Manga Larga ",
+        "Long Sleeve": "Manga Larga",
+        "Retro": "Retro Classic",
+        "Vintage": "Retro",
+        
+        // Limpieza General
+        "Jersey": "Camiseta",
+        "Shirt": "Camiseta",
+        "T-shirt": "Camiseta",
+        "YUPOO": "",
+        "yupoo": ""
     };
 
-    async function procesarNombres() {
+    function log(msg, isChange = false) {
+        const c = document.getElementById('console');
+        const style = isChange ? 'class="change-log"' : '';
+        c.innerHTML += `<div ${style}>> ${msg}</div>`;
+        c.scrollTop = c.scrollHeight;
+    }
+
+    async function iniciarProceso() {
         const col = document.getElementById('coleccion').value;
-        log(`Iniciando escaneo en <b>${col}</b>...`);
+        log(`<b>Escaneando la colección ${col.toUpperCase()}...</b>`);
 
         try {
             const snapshot = await db.collection(col).get();
-            let actualizados = 0;
+            if (snapshot.empty) {
+                log("❌ No se encontraron productos.");
+                return;
+            }
+
+            let editados = 0;
             const batch = db.batch();
 
             snapshot.forEach(doc => {
-                let nombre = doc.data().name || "";
-                let nombreNuevo = nombre;
+                let nombreOriginal = doc.data().name || "";
+                let nombreNuevo = nombreOriginal;
 
-                // Aplicar cada reemplazo del diccionario
-                Object.keys(reemplazos).forEach(clave => {
-                    if (nombreNuevo.includes(clave)) {
-                        nombreNuevo = nombreNuevo.split(clave).join(reemplazos[clave]);
-                    }
+                // 1. Aplicar reemplazos del diccionario
+                Object.keys(diccionario).forEach(key => {
+                    const regex = new RegExp(key, "gi"); // "gi" para ignorar mayúsculas/minúsculas
+                    nombreNuevo = nombreNuevo.replace(regex, diccionario[key]);
                 });
 
-                // Si el nombre cambió, lo guardamos
-                if (nombreNuevo !== nombre) {
-                    batch.update(doc.ref, { name: nombreNuevo.trim() });
-                    actualizados++;
-                    log(`Cambiado: <span class="match">${nombre}</span> ➔ ${nombreNuevo}`);
+                // 2. Limpieza final de espacios y capitalización
+                nombreNuevo = nombreNuevo.replace(/\s+/g, ' ').trim();
+                nombreNuevo = nombreNuevo.charAt(0).toUpperCase() + nombreNuevo.slice(1);
+
+                if (nombreNuevo !== nombreOriginal) {
+                    batch.update(doc.ref, { name: nombreNuevo });
+                    editados++;
+                    log(`Cambiado: ${nombreOriginal} ➔ <span style="color:#fff">${nombreNuevo}</span>`, true);
                 }
             });
 
-            if (actualizados > 0) {
+            if (editados > 0) {
                 await batch.commit();
-                log(`<br>✅ ¡ÉXITO! Se actualizaron ${actualizados} camisetas.`);
+                log(`<br>✅ ¡PROCESO COMPLETADO! Se han arreglado ${editados} camisetas.`);
             } else {
-                log("<br>✨ No se encontraron nombres que necesiten cambio.");
+                log("<br>✨ Nada que cambiar. Todo está en orden.");
             }
 
-        } catch (error) {
-            log(`❌ Error: ${error.message}`);
+        } catch (err) {
+            log(`❌ Error: ${err.message}`);
         }
     }
 </script>
