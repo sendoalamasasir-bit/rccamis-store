@@ -2,114 +2,108 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔥 Firebase Cleaner Pro - Rccamis</title>
-    
+    <title>⚽ Renombrador de Equipos - Rccamis</title>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore-compat.js"></script>
-
     <style>
-        :root { --danger: #ff4757; --dark: #2f3542; --success: #2ed573; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f1f2f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .container { background: white; width: 90%; max-width: 500px; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        h2 { color: var(--dark); text-align: center; margin-bottom: 25px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        label { display: block; margin-bottom: 8px; font-weight: bold; color: #57606f; }
-        select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ced4da; margin-bottom: 20px; font-size: 16px; }
-        .btn-delete { width: 100%; background: var(--danger); color: white; border: none; padding: 15px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: transform 0.2s, background 0.2s; }
-        .btn-delete:hover { background: #ff6b81; transform: translateY(-2px); }
-        .btn-delete:active { transform: translateY(0); }
-        #console { margin-top: 25px; background: #2f3542; color: #7bed9f; padding: 15px; border-radius: 8px; height: 180px; overflow-y: auto; font-family: 'Courier New', Courier, monospace; font-size: 13px; line-height: 1.5; }
-        .log-error { color: #ff6b81; }
-        .log-success { color: #7bed9f; font-weight: bold; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 40px; display: flex; justify-content: center; }
+        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); width: 100%; max-width: 550px; }
+        h2 { color: #1a1a1a; text-align: center; margin-bottom: 10px; }
+        p { color: #666; font-size: 14px; text-align: center; margin-bottom: 25px; }
+        select, button { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; font-size: 16px; }
+        button { background: #e67e22; color: white; border: none; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        button:hover { background: #d35400; }
+        #console { background: #2c3e50; color: #ecf0f1; padding: 15px; border-radius: 8px; height: 200px; overflow-y: auto; font-family: monospace; font-size: 12px; margin-top: 20px; }
+        .match { color: #f1c40f; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>🧹 Limpiador de Colecciones</h2>
-    
-    <label for="collectionSelect">Selecciona la colección a vaciar:</label>
-    <select id="collectionSelect">
-        <option value="laliga">🇪🇸 La Liga</option>
+<div class="card">
+    <h2>⚽ Renombrador de Equipos</h2>
+    <p>Cambia "U" por "Manchester United", "MC" por "Manchester City", etc.</p>
+
+    <label>Selecciona Colección:</label>
+    <select id="coleccion">
         <option value="premier">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</option>
+        <option value="laliga">🇪🇸 La Liga</option>
         <option value="seriea">🇮🇹 Serie A</option>
-        <option value="bundesliga">🇩🇪 Bundesliga</option>
-        <option value="ligue1">🇫🇷 Ligue 1</option>
-        <option value="retro">⏳ Retro</option>
-        <option value="kids">👶 Kids</option>
-        <option value="tracksuits">🧥 Tracksuits</option>
-        <option value="national_teams">🌍 National Teams</option>
-        <option value="Z_PRUEBA_FINAL">🧪 Z_PRUEBA_FINAL (Test)</option>
+        <option value="national_teams">🌍 Selecciones</option>
     </select>
 
-    <button class="btn-delete" onclick="handleDelete()">🔥 ELIMINAR TODO EL CONTENIDO</button>
+    <button onclick="procesarNombres()">🔄 APLICAR CAMBIOS DE NOMBRE</button>
 
-    <div id="console">> Sistema listo para limpieza...</div>
+    <div id="console">> Listo para renombrar...</div>
 </div>
 
 <script>
-    // 1. CONFIGURA TUS CREDENCIALES AQUÍ
+    // 1. CONFIGURA TUS CREDENCIALES
     const firebaseConfig = {
         apiKey: "TU_API_KEY",
         authDomain: "rccamis-store.firebaseapp.com",
         projectId: "rccamis-store",
         storageBucket: "rccamis-store.appspot.com",
-        messagingSenderId: "TU_SENDER_ID",
+        messagingSenderId: "TU_ID",
         appId: "TU_APP_ID"
     };
 
-    // Inicializar Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-
     const consoleDiv = document.getElementById('console');
 
-    function log(msg, type = '') {
-        const time = new Date().toLocaleTimeString();
-        const span = document.createElement('div');
-        if(type) span.className = `log-${type}`;
-        span.innerHTML = `[${time}] > ${msg}`;
-        consoleDiv.appendChild(span);
+    function log(msg) {
+        consoleDiv.innerHTML += `<div>> ${msg}</div>`;
         consoleDiv.scrollTop = consoleDiv.scrollHeight;
     }
 
-    async function handleDelete() {
-        const collectionName = document.getElementById('collectionSelect').value;
-        
-        // Primera confirmación
-        if (!confirm(`¿Estás seguro de borrar TODA la colección "${collectionName.toUpperCase()}"? Esta acción no se puede deshacer.`)) return;
-        
-        // Segunda confirmación (Escribir "ELIMINAR")
-        const validation = prompt(`Para confirmar, escribe "ELIMINAR" (en mayúsculas) para vaciar ${collectionName}:`);
-        if (validation !== "ELIMINAR") {
-            log("Operación cancelada: Validación incorrecta.", "error");
-            return;
-        }
+    // --- DICCIONARIO DE TRADUCCIÓN ---
+    const reemplazos = {
+        " U ": " Manchester United ",
+        "U ": "Manchester United ",
+        " MC ": " Manchester City ",
+        "Real ": "Real Madrid ",
+        "Atleti ": "Atlético de Madrid ",
+        "Barca": "FC Barcelona",
+        "PSG": "Paris Saint-Germain"
+    };
 
-        log(`Iniciando borrado de <b>${collectionName}</b>...`);
+    async function procesarNombres() {
+        const col = document.getElementById('coleccion').value;
+        log(`Iniciando escaneo en <b>${col}</b>...`);
 
         try {
-            const snapshot = await db.collection(collectionName).get();
-            
-            if (snapshot.empty) {
-                log("La colección ya está vacía.", "success");
-                return;
-            }
-
+            const snapshot = await db.collection(col).get();
+            let actualizados = 0;
             const batch = db.batch();
-            let count = 0;
 
-            snapshot.forEach((doc) => {
-                batch.delete(doc.ref);
-                count++;
+            snapshot.forEach(doc => {
+                let nombre = doc.data().name || "";
+                let nombreNuevo = nombre;
+
+                // Aplicar cada reemplazo del diccionario
+                Object.keys(reemplazos).forEach(clave => {
+                    if (nombreNuevo.includes(clave)) {
+                        nombreNuevo = nombreNuevo.split(clave).join(reemplazos[clave]);
+                    }
+                });
+
+                // Si el nombre cambió, lo guardamos
+                if (nombreNuevo !== nombre) {
+                    batch.update(doc.ref, { name: nombreNuevo.trim() });
+                    actualizados++;
+                    log(`Cambiado: <span class="match">${nombre}</span> ➔ ${nombreNuevo}`);
+                }
             });
 
-            await batch.commit();
-            log(`✨ ¡ÉXITO! Se han eliminado ${count} documentos.`, "success");
-            
+            if (actualizados > 0) {
+                await batch.commit();
+                log(`<br>✅ ¡ÉXITO! Se actualizaron ${actualizados} camisetas.`);
+            } else {
+                log("<br>✨ No se encontraron nombres que necesiten cambio.");
+            }
+
         } catch (error) {
-            log(`ERROR: ${error.message}`, "error");
-            console.error(error);
+            log(`❌ Error: ${error.message}`);
         }
     }
 </script>
