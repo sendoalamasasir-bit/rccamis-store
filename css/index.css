@@ -1,0 +1,15 @@
+html { scroll-behavior: smooth; }
+
+body { font-family: 'Inter', sans-serif; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .option-btn { border: 1px solid #e2e8f0; transition: all 0.2s; }
+        .option-btn:hover { border-color: #94a3b8; }
+        .option-btn.active { border-color: #e11d48; background-color: #fff1f2; color: #e11d48; font-weight: 700; ring: 1px solid #e11d48; }
+        .dark .option-btn { border-color: #334155; }
+        .dark .option-btn.active { background-color: #e11d48; color: white; border-color: #e11d48; }
+        .fade-in { animation: fadeIn 0.4s ease-in-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .toast-slide-up { animation: toastSlide 0.3s ease-out forwards; }
+        @keyframes toastSlide { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .group:hover .group-hover\:block { display: block; }

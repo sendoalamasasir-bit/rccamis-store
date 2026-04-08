@@ -1,0 +1,10 @@
+:root { --accent: #2980b9; --bg: #f8f9fa; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); padding: 20px; display: flex; justify-content: center; }
+        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 600px; }
+        h2 { text-align: center; color: #2c3e50; margin-bottom: 5px; }
+        .badge { background: #e74c3c; color: white; padding: 3px 8px; border-radius: 4px; font-size: 11px; display: inline-block; margin-bottom: 20px; }
+        select, button { width: 100%; padding: 14px; margin: 10px 0; border-radius: 8px; font-size: 16px; border: 1px solid #ddd; }
+        button { background: var(--accent); color: white; border: none; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        button:hover { background: #1f6391; transform: translateY(-1px); }
+        #console { background: #1e272e; color: #44bd32; padding: 15px; border-radius: 8px; height: 300px; overflow-y: auto; font-family: 'Consolas', monospace; font-size: 12px; margin-top: 15px; border: 4px solid #2f3640; }
+        .change-log { color: #fbc531; }
